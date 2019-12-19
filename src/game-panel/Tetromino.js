@@ -132,4 +132,21 @@ function rotateI(points: Set<Position>, centre, orientation) {
   }
 }
 
+class Generator {
+  // Use Random Generator (https://tetris.fandom.com/wiki/Random_Generator).
+  
+  bag: Array<TetrominoType> = [];
+
+  next = () => {
+    if (this.bag.length === 0) {
+      this.bag = ['I', 'J', 'L', 'O', 'S', 'T', 'Z'];
+    }
+
+    const index = Math.floor(Math.random() * this.bag.length);
+    return new Tetromino(this.bag.splice(index, 1)[0]);
+  }
+}
+
+export const tetrominoGenerator = new Generator();
+
 export default Tetromino;
