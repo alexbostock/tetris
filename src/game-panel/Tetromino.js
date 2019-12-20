@@ -129,6 +129,9 @@ function rotateI(points: Set<Position>, centre, orientation) {
         centre.downOne(),
         centre.downOne().downOne(),
       ]);
+    default:
+      console.error(`Unexpected tetromino orientation: ${orientation}`);
+        return Set();
   }
 }
 
