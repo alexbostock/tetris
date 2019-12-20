@@ -18,7 +18,6 @@ test('correctly renders minos described by props', () => {
     <GameCanvas
       tetromino={tet}
       staticBlocks={staticBlocks}
-      addStaticBlock={x => x}
     />
   );
 

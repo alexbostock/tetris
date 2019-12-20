@@ -9,7 +9,6 @@ import Tetromino from './Tetromino';
 type Props = {
   tetromino: Tetromino,
   staticBlocks: Set<Position>,
-  addStaticBlock: Position => void,
 };
 
 function GameCanvas(props: Props) {
@@ -33,8 +32,8 @@ function GameCanvas(props: Props) {
 
 function Mino(pos: Position, colour: string) {
   const style = {
-    gridColumn: pos.x,
-    gridRow: pos.y,
+    gridColumn: pos.x + 1,
+    gridRow: pos.y + 1,
     color: colour,
   };
 

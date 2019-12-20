@@ -24,6 +24,14 @@ class Position {
   leftOne() {
     return new Position(this.x - 1, this.y);
   }
+
+  equals(other: Position) {
+    return this.x === other.x && this.y === other.y;
+  }
+
+  hashCode() {
+    return this.x + this.y | 0;
+  }
 }
 
 export default Position;

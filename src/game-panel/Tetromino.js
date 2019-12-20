@@ -46,6 +46,13 @@ class Tetromino {
     t.orientation = (this.orientation + 1) % 4;
     return t;
   }
+
+  advance() {
+    const t = new Tetromino(this.type, this.pos.downOne());
+    t.orientation = this.orientation;
+
+    return t;
+  }
 }
 
 function cellsOrientation0(type: TetrominoType, centre: Position) {
