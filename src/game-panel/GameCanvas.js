@@ -26,8 +26,8 @@ function GameCanvas(props: Props) {
         gridTemplateRows: `repeat(${height}, 1fr)`,
       }}
     >
-      {props.tetromino.occupiedCells().map(pos => Mino(pos, 'red'))}
-      {props.staticBlocks.map(pos => Mino(pos, 'blue'))}
+      {props.tetromino.occupiedCells().map(pos => Mino(pos, props.tetromino.color()))}
+      {props.staticBlocks.map(pos => Mino(pos, 'grey'))}
     </div>
   );
 }

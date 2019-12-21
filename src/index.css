@@ -1,0 +1,7 @@
+#gameCanvas {
+    border: 1px solid black;
+}
+
+.mino {
+    border: 0.5px solid white;
+}

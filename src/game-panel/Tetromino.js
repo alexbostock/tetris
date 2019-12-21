@@ -53,6 +53,21 @@ class Tetromino {
 
     return t;
   }
+
+  color() {
+    switch (this.type) {
+      case 'I': return 'red';
+      case 'J': return 'orange';
+      case 'L': return 'yellow';
+      case 'O': return 'green';
+      case 'S': return 'blue';
+      case 'T': return 'indigo';
+      case 'Z': return 'violet';
+      default:
+        console.error(`Unexpected tetromino type: ${this.type}`);
+        return '';
+    }
+  }
 }
 
 function cellsOrientation0(type: TetrominoType, centre: Position) {
