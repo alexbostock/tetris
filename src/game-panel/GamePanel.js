@@ -14,6 +14,7 @@ type Props = {
 type State = {
   currentTetromino: Tetromino,
   staticBlocks: Set<Position>,
+  timer?: IntervalID,
 };
 
 class GamePanel extends React.PureComponent<Props, State> {
@@ -21,10 +22,6 @@ class GamePanel extends React.PureComponent<Props, State> {
     currentTetromino: tetrominoGenerator.next(),
     staticBlocks: Set<Position>(),
   };
-
-  addStaticBlock(pos: Position) {
-    this.setState({ staticBlocks: this.state.staticBlocks.add(pos) });
-  }
 
   render() {
     return (
@@ -37,17 +34,31 @@ class GamePanel extends React.PureComponent<Props, State> {
     );
   }
 
-  tick() {
+  componentDidMount() {
+    const interval = 500;
+    const timer = setInterval(this.tick, interval);
+    this.setState({ timer: timer });
+  }
+
+  componentWillUnmount() {
+    if (this.state.timer) {
+      clearInterval(this.state.timer);
+    }
+  }
+
+  tick = () => {
     this.setState({
       currentTetromino: this.state.currentTetromino.advance(),
     }, () => {
       if (this.landed()) {
+        let statics = this.state.staticBlocks;
         for (let cell of this.state.currentTetromino.occupiedCells()) {
-          this.addStaticBlock(cell);
+          statics = statics.add(cell);
         }
 
         this.setState({
           currentTetromino: tetrominoGenerator.next(),
+          staticBlocks: statics,
         });
       }
     });

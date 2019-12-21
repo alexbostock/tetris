@@ -19,9 +19,11 @@ function GameCanvas(props: Props) {
     <div
       id="gameCanvas"
       style={{
+        height: height + 'em',
+        width: width + 'em',
         display: 'grid',
-        gridTemplateColumns: width,
-        gridTemplateRows: height,
+        gridTemplateColumns: `repeat(${width}, 1fr)`,
+        gridTemplateRows: `repeat(${height}, 1fr)`,
       }}
     >
       {props.tetromino.occupiedCells().map(pos => Mino(pos, 'red'))}
@@ -34,7 +36,7 @@ function Mino(pos: Position, colour: string) {
   const style = {
     gridColumn: pos.x + 1,
     gridRow: pos.y + 1,
-    color: colour,
+    backgroundColor: colour,
   };
 
   return <div key={pos.x + ',' + pos.y} className="mino" style={style}></div>;
