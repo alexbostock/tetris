@@ -14,13 +14,16 @@ type Props = {
 type State = {
   currentTetromino: Tetromino,
   staticBlocks: Set<Position>,
-  timer?: IntervalID,
+  gameOver: boolean,
+  timer: ?IntervalID,
 };
 
 class GamePanel extends React.PureComponent<Props, State> {
   state = {
     currentTetromino: tetrominoGenerator.next(),
     staticBlocks: Set<Position>(),
+    gameOver: false,
+    timer: null,
   };
 
   render() {
@@ -47,40 +50,45 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   tick = () => {
-    this.setState({
-      currentTetromino: this.state.currentTetromino.advance(),
-    }, () => {
-      if (this.landed()) {
-        let statics = this.state.staticBlocks;
-        for (let cell of this.state.currentTetromino.occupiedCells()) {
-          statics = statics.add(cell);
-        }
+    let tet = this.state.currentTetromino;
+    let statics = this.state.staticBlocks;
+    let gameOver = false
+    if (this.landed()) {
+      statics = tet.occupiedCells()
+        .reduce((acc, cell) => acc.add(cell), statics);
+      
+      tet = tetrominoGenerator.next();
 
-        this.setState({
-          currentTetromino: tetrominoGenerator.next(),
-          staticBlocks: statics,
-        });
+      while (tet.occupiedCells().intersect(statics).count() > 0) {
+        gameOver = true;
+        tet.pos = tet.pos.upOne();
+        if (this.state.timer) {
+          clearInterval(this.state.timer);
+        }
       }
+    } else {
+      tet = this.state.currentTetromino.advance();
+    }
+
+    this.setState({
+      currentTetromino: tet,
+      staticBlocks: statics,
+      gameOver: gameOver,
+      timer: gameOver ? null : this.state.timer,
     });
   }
 
   landed() {
-    for (let i = 0; i < 10; i++) {
-      const lowest = this.state.currentTetromino.occupiedCells()
-        .reduce((acc: number, cell: Position) => {
-          return cell.x === i ? Math.max(acc, cell.y) : acc;
-        }, -1);
-      
-      if (this.state.staticBlocks.has(new Position(i, lowest + 1))) {
-        return true;
-      }
-
-      if (lowest === 19) {
-        return true;
-      }
+    const lowestRow = this.state.currentTetromino.occupiedCells()
+      .reduce((acc: number, cell: Position) => Math.max(acc, cell.y), -1);
+    if (lowestRow === 19) {
+      return true;
     }
 
-    return false;
+    const overlapAfterOneTick = this.state.currentTetromino.advance().occupiedCells()
+      .intersect(this.state.staticBlocks);
+
+    return overlapAfterOneTick.count() > 0;
   }
 }
 

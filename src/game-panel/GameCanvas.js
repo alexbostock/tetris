@@ -33,6 +33,10 @@ function GameCanvas(props: Props) {
 }
 
 function Mino(pos: Position, colour: string) {
+  if (pos.y < 0) {
+    return null;
+  }
+
   const style = {
     gridColumn: pos.x + 1,
     gridRow: pos.y + 1,
