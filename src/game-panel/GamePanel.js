@@ -176,11 +176,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     const tet = this.state.currentTetromino.rotateLeft();
     const toOrientation = tet.orientation;
 
-    const predicate = tet => {
-      return !overlap(tet, this.state.staticBlocks) && withinBounds(tet);
-    };
-
-    this.wallKick(tet, fromOrientation, toOrientation, predicate);
+    this.wallKick(tet, fromOrientation, toOrientation);
   }
 
   rotateRight() {
@@ -188,14 +184,10 @@ class GamePanel extends React.PureComponent<Props, State> {
     const tet = this.state.currentTetromino.rotateRight();
     const toOrientation = tet.orientation;
 
-    const predicate = tet => {
-      return !overlap(tet, this.state.staticBlocks) && withinBounds(tet);
-    };
-
-    this.wallKick(tet, fromOrientation, toOrientation, predicate);
+    this.wallKick(tet, fromOrientation, toOrientation);
   }
 
-  wallKick(tet: Tetromino, from: number, to: number, pred: Tetromino => boolean) {
+  wallKick(tet: Tetromino, from: number, to: number) {
     let transformations;
     switch (tet.type) {
       case 'O':
@@ -209,18 +201,22 @@ class GamePanel extends React.PureComponent<Props, State> {
         break;
     }
 
-    transformations.forEach(t => {
+    const pred = (tet: Tetromino) => {
+      return !overlap(tet, this.state.staticBlocks) && withinBounds(tet);
+    };
+
+    for (const t of transformations) {
       const transformed = tet.transform(t);
       if (pred(transformed)) {
         this.setState({ currentTetromino: transformed });
-        return;
       }
-    });
+      return;
+    }
   }
 }
 
 function withinBounds(tet: Tetromino) {
-  for (let cell of tet.occupiedCells()) {
+  for (const cell of tet.occupiedCells()) {
     if (cell.x > 9 || cell.x < 0 || cell.y > 19 || cell.y < 0) {
       return false;
     }
