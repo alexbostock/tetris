@@ -37,6 +37,7 @@ class GamePanel extends React.PureComponent<Props, State> {
         <GameCanvas
           tetromino={this.state.currentTetromino}
           staticBlocks={this.state.staticBlocks}
+          shadow={this.shadow()}
         />
       </div>
     );
@@ -212,6 +213,15 @@ class GamePanel extends React.PureComponent<Props, State> {
       }
       return;
     }
+  }
+
+  shadow() {
+    let tet = this.state.currentTetromino;
+    while(!this.landed(tet)) {
+      tet = tet.downOne();
+    }
+
+    return tet;
   }
 }
 
