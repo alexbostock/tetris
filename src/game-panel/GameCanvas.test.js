@@ -14,10 +14,34 @@ test('correctly renders minos described by props', () => {
     new Position(5, 10),
   ]);
 
-  const canvas = renderer.create(
+  let canvas = renderer.create(
     <GameCanvas
       tetromino={tet}
       staticBlocks={staticBlocks}
+      playing={false}
+      gameOver={false}
+    />
+  );
+
+  expect(canvas.toJSON()).toMatchSnapshot();
+
+  canvas = renderer.create(
+    <GameCanvas
+      tetromino={tet}
+      staticBlocks={staticBlocks}
+      playing={false}
+      gameOver={true}
+    />
+  );
+
+  expect(canvas.toJSON()).toMatchSnapshot();
+
+  canvas = renderer.create(
+    <GameCanvas
+      tetromino={tet}
+      staticBlocks={staticBlocks}
+      playing={true}
+      gameOver={false}
     />
   );
 

@@ -5,11 +5,15 @@ import { Set } from 'immutable';
 
 import Position from './Position';
 import Tetromino from './Tetromino';
+import StartGameMenu from './StartGameMenu';
 
 type Props = {
   tetromino: Tetromino,
   staticBlocks: Set<Position>,
   shadow?: Tetromino,
+  playing: boolean,
+  gameOver: boolean,
+  startGame: () => void,
 };
 
 function GameCanvas(props: Props) {
@@ -36,6 +40,10 @@ function GameCanvas(props: Props) {
       {shadow}
       {tet}
       {props.staticBlocks.map(pos => Mino(pos, 'grey'))}
+      {
+        props.playing ? null :
+        <StartGameMenu gameOver={props.gameOver} startGame={props.startGame} />
+      }
     </div>
   );
 }

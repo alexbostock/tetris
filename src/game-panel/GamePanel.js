@@ -15,6 +15,7 @@ type Props = {
 type State = {
   currentTetromino: Tetromino,
   staticBlocks: Set<Position>,
+  playing: boolean,
   gameOver: boolean,
   timer: ?IntervalID,
 };
@@ -23,6 +24,7 @@ class GamePanel extends React.PureComponent<Props, State> {
   state = {
     currentTetromino: tetrominoGenerator.next(),
     staticBlocks: Set<Position>(),
+    playing: false,
     gameOver: false,
     timer: null,
   };
@@ -38,15 +40,24 @@ class GamePanel extends React.PureComponent<Props, State> {
           tetromino={this.state.currentTetromino}
           staticBlocks={this.state.staticBlocks}
           shadow={this.shadow()}
+          playing={this.state.playing}
+          gameOver={this.state.gameOver}
+          startGame={this.startGame}
         />
       </div>
     );
   }
 
-  componentDidMount() {
+  startGame = () => {
     const interval = 500;
     const timer = setInterval(this.tick, interval);
-    this.setState({ timer: timer });
+    this.setState({
+      currentTetromino: tetrominoGenerator.next(),
+      staticBlocks: Set<Position>(),
+      playing: true,
+      gameOver: false,
+      timer: timer,
+    });
   }
 
   componentWillUnmount() {
@@ -79,13 +90,14 @@ class GamePanel extends React.PureComponent<Props, State> {
     this.setState({
       currentTetromino: tet,
       staticBlocks: statics,
+      playing: !gameOver,
       gameOver: gameOver,
       timer: gameOver ? null : this.state.timer,
     });
   }
 
   handleKey = (event: SyntheticKeyboardEvent<*>) => {
-    if (this.state.gameOver) {
+    if (!this.state.playing) {
       return;
     }
 
@@ -167,6 +179,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     this.setState({
       currentTetromino: tet,
       staticBlocks: statics,
+      playing: !gameOver,
       gameOver: gameOver,
       timer: gameOver ? null : this.state.timer,
     });
@@ -210,8 +223,8 @@ class GamePanel extends React.PureComponent<Props, State> {
       const transformed = tet.transform(t);
       if (pred(transformed)) {
         this.setState({ currentTetromino: transformed });
+        return;
       }
-      return;
     }
   }
 
