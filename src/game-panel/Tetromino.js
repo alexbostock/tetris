@@ -48,7 +48,32 @@ class Tetromino {
   }
 
   advance() {
+    return this.downOne();
+  }
+  
+  downOne() {
     const t = new Tetromino(this.type, this.pos.downOne());
+    t.orientation = this.orientation;
+
+    return t;
+  }
+
+  upOne() {
+    const t = new Tetromino(this.type, this.pos.upOne());
+    t.orientation = this.orientation;
+
+    return t;
+  }
+
+  rightOne() {
+    const t = new Tetromino(this.type, this.pos.rightOne());
+    t.orientation = this.orientation;
+
+    return t;
+  }
+
+  leftOne() {
+    const t = new Tetromino(this.type, this.pos.leftOne());
     t.orientation = this.orientation;
 
     return t;

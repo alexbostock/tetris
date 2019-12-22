@@ -28,7 +28,11 @@ class GamePanel extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <div id="gamePanel">
+      <div
+        id="gamePanel"
+        tabIndex="0"
+        onKeyDown={this.handleKey}
+      >
         <GameCanvas
           tetromino={this.state.currentTetromino}
           staticBlocks={this.state.staticBlocks}
@@ -54,14 +58,13 @@ class GamePanel extends React.PureComponent<Props, State> {
     let statics = this.state.staticBlocks;
     let gameOver = false
     if (this.landed()) {
-      statics = tet.occupiedCells()
-        .reduce((acc, cell) => acc.add(cell), statics);
+      statics = statics.union(tet.occupiedCells());
       
       tet = tetrominoGenerator.next();
 
-      while (tet.occupiedCells().intersect(statics).count() > 0) {
+      while (overlap(tet, statics)) {
         gameOver = true;
-        tet.pos = tet.pos.upOne();
+        tet = tet.upOne();
         if (this.state.timer) {
           clearInterval(this.state.timer);
         }
@@ -78,18 +81,96 @@ class GamePanel extends React.PureComponent<Props, State> {
     });
   }
 
-  landed() {
-    const lowestRow = this.state.currentTetromino.occupiedCells()
+  handleKey = (event: SyntheticKeyboardEvent<*>) => {
+    if (this.state.gameOver) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowLeft':
+        this.moveLeft();
+        break;
+      case 'ArrowUp':
+        this.hardDrop();
+        break;
+      case 'ArrowRight':
+        this.moveRight();
+        break;
+      case 'ArrowDown':
+        this.tick();
+        break;
+      case ' ':
+        console.log('(space)');
+        // TODO: rotate
+        break;
+      default:
+        // Ignore other keys.
+        break;
+    }
+  }
+
+  landed(tet: Tetromino = this.state.currentTetromino) {
+    const lowestRow = tet.occupiedCells()
       .reduce((acc: number, cell: Position) => Math.max(acc, cell.y), -1);
     if (lowestRow === 19) {
       return true;
     }
 
-    const overlapAfterOneTick = this.state.currentTetromino.advance().occupiedCells()
-      .intersect(this.state.staticBlocks);
-
-    return overlapAfterOneTick.count() > 0;
+    return overlap(tet.advance(), this.state.staticBlocks);
   }
+
+  moveRight() {
+    const tet = this.state.currentTetromino.rightOne();
+    if (withinBounds(tet) && !overlap(tet, this.state.staticBlocks)) {
+      this.setState({ currentTetromino: tet });
+    }
+  }
+
+  moveLeft() {
+    const tet = this.state.currentTetromino.leftOne();
+    if (withinBounds(tet) && !overlap(tet, this.state.staticBlocks)) {
+      this.setState({ currentTetromino: tet });
+    }
+  }
+
+  hardDrop() {
+    let tet = this.state.currentTetromino;
+    while (!this.landed(tet)) {
+      tet = tet.downOne();
+    }
+
+    const statics = this.state.staticBlocks.union(tet.occupiedCells());
+    tet = tetrominoGenerator.next();
+    let gameOver = false;
+    while (overlap(tet, statics)) {
+      gameOver = true;
+      tet = tet.upOne();
+      if (this.state.timer) {
+        clearInterval(this.state.timer);
+      }
+    }
+
+    this.setState({
+      currentTetromino: tet,
+      staticBlocks: statics,
+      gameOver: gameOver,
+      timer: gameOver ? null : this.state.timer,
+    });
+  }
+}
+
+function withinBounds(tet: Tetromino) {
+  for (let cell of tet.occupiedCells()) {
+    if (cell.x > 9 || cell.x < 0 || cell.y > 19 || cell.y < 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function overlap(a: Tetromino, b: Set<Position>) {
+  return a.occupiedCells().intersect(b).count() > 0;
 }
 
 export default GamePanel;
