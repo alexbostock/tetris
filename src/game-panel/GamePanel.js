@@ -6,6 +6,7 @@ import { Set } from 'immutable';
 import Position from './Position';
 import Tetromino, { tetrominoGenerator } from './Tetromino';
 import GameCanvas from './GameCanvas';
+import wallKicks from './wallKicks';
 
 type Props = {
 
@@ -100,10 +101,19 @@ class GamePanel extends React.PureComponent<Props, State> {
       case 'ArrowDown':
         this.tick();
         break;
-      case ' ':
-        console.log('(space)');
-        // TODO: rotate
+      
+      // Rotate left: z key on QWERTY, or same keyboard position on Dvorak.
+      case 'z':
+      case ';':
+        this.rotateLeft();
         break;
+      
+      // Rotate right: x key on QWERTY, or same keyboard position on Dvorak.
+      case 'x':
+      case 'q':
+        this.rotateRight();
+        break;
+      
       default:
         // Ignore other keys.
         break;
@@ -142,7 +152,7 @@ class GamePanel extends React.PureComponent<Props, State> {
 
     let statics = this.state.staticBlocks.union(tet.occupiedCells());
     statics = clearRows(statics);
-    
+
     tet = tetrominoGenerator.next();
     let gameOver = false;
     while (overlap(tet, statics)) {
@@ -158,6 +168,53 @@ class GamePanel extends React.PureComponent<Props, State> {
       staticBlocks: statics,
       gameOver: gameOver,
       timer: gameOver ? null : this.state.timer,
+    });
+  }
+
+  rotateLeft() {
+    const fromOrientation = this.state.currentTetromino.orientation;
+    const tet = this.state.currentTetromino.rotateLeft();
+    const toOrientation = tet.orientation;
+
+    const predicate = tet => {
+      return !overlap(tet, this.state.staticBlocks) && withinBounds(tet);
+    };
+
+    this.wallKick(tet, fromOrientation, toOrientation, predicate);
+  }
+
+  rotateRight() {
+    const fromOrientation = this.state.currentTetromino.orientation;
+    const tet = this.state.currentTetromino.rotateRight();
+    const toOrientation = tet.orientation;
+
+    const predicate = tet => {
+      return !overlap(tet, this.state.staticBlocks) && withinBounds(tet);
+    };
+
+    this.wallKick(tet, fromOrientation, toOrientation, predicate);
+  }
+
+  wallKick(tet: Tetromino, from: number, to: number, pred: Tetromino => boolean) {
+    let transformations;
+    switch (tet.type) {
+      case 'O':
+        transformations = [new Position(0, 0)];
+        break;
+      case 'I':
+        transformations = wallKicks.getIn(['I', from, to]);
+        break;
+      default:
+        transformations = wallKicks.getIn(['others', from, to]);
+        break;
+    }
+
+    transformations.forEach(t => {
+      const transformed = tet.transform(t);
+      if (pred(transformed)) {
+        this.setState({ currentTetromino: transformed });
+        return;
+      }
     });
   }
 }

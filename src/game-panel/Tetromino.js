@@ -79,6 +79,13 @@ class Tetromino {
     return t;
   }
 
+  transform(delta: Position) {
+    const t = new Tetromino(this.type, this.pos.add(delta));
+    t.orientation = this.orientation;
+
+    return t;
+  }
+
   color() {
     switch (this.type) {
       case 'I': return 'red';

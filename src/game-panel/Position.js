@@ -25,6 +25,10 @@ class Position {
     return new Position(this.x - 1, this.y);
   }
 
+  add(p: Position) {
+    return new Position(this.x + p.x, this.y + p.y);
+  }
+
   equals(other: Position) {
     return this.x === other.x && this.y === other.y;
   }
