@@ -59,6 +59,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     let gameOver = false
     if (this.landed()) {
       statics = statics.union(tet.occupiedCells());
+      statics = clearRows(statics);
       
       tet = tetrominoGenerator.next();
 
@@ -139,7 +140,9 @@ class GamePanel extends React.PureComponent<Props, State> {
       tet = tet.downOne();
     }
 
-    const statics = this.state.staticBlocks.union(tet.occupiedCells());
+    let statics = this.state.staticBlocks.union(tet.occupiedCells());
+    statics = clearRows(statics);
+    
     tet = tetrominoGenerator.next();
     let gameOver = false;
     while (overlap(tet, statics)) {
@@ -171,6 +174,18 @@ function withinBounds(tet: Tetromino) {
 
 function overlap(a: Tetromino, b: Set<Position>) {
   return a.occupiedCells().intersect(b).count() > 0;
+}
+
+function clearRows(cells: Set<Position>) {
+  for (let rowNum = 0; rowNum < 20; rowNum++) {
+    const row = cells.filter(pos => pos.y === rowNum);
+    if (row.count() === 10) {
+      cells = cells.subtract(row);
+      cells = cells.map(pos => pos.y < rowNum ? pos.downOne() : pos);
+    }
+  }
+
+  return cells;
 }
 
 export default GamePanel;
