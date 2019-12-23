@@ -6,7 +6,10 @@ import { Set } from 'immutable';
 import Position from './Position';
 import Tetromino, { tetrominoGenerator } from './Tetromino';
 import GameCanvas from './GameCanvas';
+import GameControls from './GameControls';
 import wallKicks from './wallKicks';
+
+export type GameState = 'preStart' | 'paused' | 'gameOver' | 'playing';
 
 type Props = {
 
@@ -15,8 +18,7 @@ type Props = {
 type State = {
   currentTetromino: Tetromino,
   staticBlocks: Set<Position>,
-  playing: boolean,
-  gameOver: boolean,
+  gameState: GameState,
   timer: ?IntervalID,
 };
 
@@ -24,8 +26,7 @@ class GamePanel extends React.PureComponent<Props, State> {
   state = {
     currentTetromino: tetrominoGenerator.next(),
     staticBlocks: Set<Position>(),
-    playing: false,
-    gameOver: false,
+    gameState: 'preStart',
     timer: null,
   };
 
@@ -40,9 +41,13 @@ class GamePanel extends React.PureComponent<Props, State> {
           tetromino={this.state.currentTetromino}
           staticBlocks={this.state.staticBlocks}
           shadow={this.shadow()}
-          playing={this.state.playing}
-          gameOver={this.state.gameOver}
+          gameState={this.state.gameState}
           startGame={this.startGame}
+        />
+
+        <GameControls
+          playing={this.state.gameState === 'playing'}
+          pause={this.pause}
         />
       </div>
     );
@@ -51,12 +56,30 @@ class GamePanel extends React.PureComponent<Props, State> {
   startGame = () => {
     const interval = 500;
     const timer = setInterval(this.tick, interval);
+
+    let tet = this.state.currentTetromino;
+    let statics = this.state.staticBlocks;
+    if (this.state.gameState === 'gameOver') {
+      tet = tetrominoGenerator.next();
+      statics = Set<Position>();
+    }
+
     this.setState({
-      currentTetromino: tetrominoGenerator.next(),
-      staticBlocks: Set<Position>(),
-      playing: true,
-      gameOver: false,
+      currentTetromino: tet,
+      staticBlocks: statics,
+      gameState: 'playing',
       timer: timer,
+    });
+  }
+
+  pause = () => {
+    if (this.state.timer) {
+      clearInterval(this.state.timer);
+    }
+
+    this.setState({
+      gameState: 'paused',
+      timer: null,
     });
   }
 
@@ -90,14 +113,13 @@ class GamePanel extends React.PureComponent<Props, State> {
     this.setState({
       currentTetromino: tet,
       staticBlocks: statics,
-      playing: !gameOver,
-      gameOver: gameOver,
+      gameState: gameOver ? 'gameOver' : 'playing',
       timer: gameOver ? null : this.state.timer,
     });
   }
 
   handleKey = (event: SyntheticKeyboardEvent<*>) => {
-    if (!this.state.playing) {
+    if (this.state.gameState !== 'playing') {
       return;
     }
 
@@ -179,8 +201,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     this.setState({
       currentTetromino: tet,
       staticBlocks: statics,
-      playing: !gameOver,
-      gameOver: gameOver,
+      gameState: gameOver ? 'gameOver' : 'playing',
       timer: gameOver ? null : this.state.timer,
     });
   }

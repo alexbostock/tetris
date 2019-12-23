@@ -7,12 +7,13 @@ import Position from './Position';
 import Tetromino from './Tetromino';
 import StartGameMenu from './StartGameMenu';
 
+import type { GameState } from './GamePanel';
+
 type Props = {
   tetromino: Tetromino,
   staticBlocks: Set<Position>,
   shadow?: Tetromino,
-  playing: boolean,
-  gameOver: boolean,
+  gameState: GameState,
   startGame: () => void,
 };
 
@@ -41,8 +42,8 @@ function GameCanvas(props: Props) {
       {tet}
       {props.staticBlocks.map(pos => Mino(pos, 'grey'))}
       {
-        props.playing ? null :
-        <StartGameMenu gameOver={props.gameOver} startGame={props.startGame} />
+        props.gameState === 'playing' ? null :
+        <StartGameMenu gameState={props.gameState} startGame={props.startGame} />
       }
     </div>
   );

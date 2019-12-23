@@ -18,8 +18,7 @@ test('correctly renders minos described by props', () => {
     <GameCanvas
       tetromino={tet}
       staticBlocks={staticBlocks}
-      playing={false}
-      gameOver={false}
+      gameState={'preStart'}
     />
   );
 
@@ -29,8 +28,7 @@ test('correctly renders minos described by props', () => {
     <GameCanvas
       tetromino={tet}
       staticBlocks={staticBlocks}
-      playing={false}
-      gameOver={true}
+      gameState={'gameOver'}
     />
   );
 
@@ -40,8 +38,7 @@ test('correctly renders minos described by props', () => {
     <GameCanvas
       tetromino={tet}
       staticBlocks={staticBlocks}
-      playing={true}
-      gameOver={false}
+      gameState={'playing'}
     />
   );
 
