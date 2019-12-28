@@ -1,5 +1,32 @@
+body {
+    font-family: Impact, sans-serif;
+    background-color: black;
+    color: blue;
+}
+
+button {
+    font-family: inherit;
+    font-size: 1em;
+    background-color: orange;
+    border: none;
+    color: blue;
+    padding: 0.2em;
+}
+
+button:hover {
+    text-decoration: underline;
+}
+
+#gamePanel {
+    display: flex;
+}
+
+#gamePanel > * {
+    margin: 0.5em;
+}
+
 #gameCanvas {
-    border: 1px solid black;
+    border: 1px solid white;
     padding: 0.5px;
 }
 

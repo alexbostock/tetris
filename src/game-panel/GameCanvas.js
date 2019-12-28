@@ -40,7 +40,7 @@ function GameCanvas(props: Props) {
     >
       {shadow}
       {tet}
-      {props.staticBlocks.map(pos => Mino(pos, 'grey'))}
+      {props.staticBlocks.map(pos => Mino(pos, 'brown'))}
       {
         props.gameState === 'playing' ? null :
         <StartGameMenu gameState={props.gameState} startGame={props.startGame} />

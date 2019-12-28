@@ -61,7 +61,7 @@ exports[`correctly renders minos described by props 1`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 4,
         "gridRow": 11,
         "opacity": 1,
@@ -72,7 +72,7 @@ exports[`correctly renders minos described by props 1`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 5,
         "gridRow": 11,
         "opacity": 1,
@@ -83,7 +83,7 @@ exports[`correctly renders minos described by props 1`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 6,
         "gridRow": 11,
         "opacity": 1,
@@ -163,7 +163,7 @@ exports[`correctly renders minos described by props 2`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 4,
         "gridRow": 11,
         "opacity": 1,
@@ -174,7 +174,7 @@ exports[`correctly renders minos described by props 2`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 5,
         "gridRow": 11,
         "opacity": 1,
@@ -185,7 +185,7 @@ exports[`correctly renders minos described by props 2`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 6,
         "gridRow": 11,
         "opacity": 1,
@@ -268,7 +268,7 @@ exports[`correctly renders minos described by props 3`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 4,
         "gridRow": 11,
         "opacity": 1,
@@ -279,7 +279,7 @@ exports[`correctly renders minos described by props 3`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 5,
         "gridRow": 11,
         "opacity": 1,
@@ -290,7 +290,7 @@ exports[`correctly renders minos described by props 3`] = `
     className="mino"
     style={
       Object {
-        "backgroundColor": "grey",
+        "backgroundColor": "brown",
         "gridColumn": 6,
         "gridRow": 11,
         "opacity": 1,
