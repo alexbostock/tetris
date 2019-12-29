@@ -12,23 +12,29 @@ import wallKicks from './wallKicks';
 export type GameState = 'preStart' | 'paused' | 'gameOver' | 'playing';
 
 type Props = {
-
+  speed?: number, // ticks / second
 };
 
 type State = {
   currentTetromino: Tetromino,
   staticBlocks: Set<Position>,
   gameState: GameState,
+  speed: number,
   timer: ?IntervalID,
 };
 
 class GamePanel extends React.PureComponent<Props, State> {
-  state = {
-    currentTetromino: tetrominoGenerator.next(),
-    staticBlocks: Set<Position>(),
-    gameState: 'preStart',
-    timer: null,
-  };
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      currentTetromino: tetrominoGenerator.next(),
+      staticBlocks: Set<Position>(),
+      gameState: 'preStart',
+      speed: props.speed || 2,
+      timer: null,
+    };
+  }
 
   render() {
     return (
@@ -54,7 +60,8 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   startGame = () => {
-    const interval = 500;
+    const speed = this.props.speed || 2;
+    const interval = 1000 / speed;
     const timer = setInterval(this.tick, interval);
 
     let tet = this.state.currentTetromino;
@@ -68,6 +75,7 @@ class GamePanel extends React.PureComponent<Props, State> {
       currentTetromino: tet,
       staticBlocks: statics,
       gameState: 'playing',
+      speed: this.props.speed,
       timer: timer,
     });
   }
@@ -110,11 +118,20 @@ class GamePanel extends React.PureComponent<Props, State> {
       tet = this.state.currentTetromino.advance();
     }
 
+    let timer = this.state.timer;
+    if (!gameOver && this.props.speed !== this.state.speed) {
+      clearInterval(this.state.timer);
+      const speed = this.props.speed || 2;
+      const interval = 1000 / speed;
+      timer = setInterval(this.tick, interval);
+    }
+
     this.setState({
       currentTetromino: tet,
       staticBlocks: statics,
       gameState: gameOver ? 'gameOver' : 'playing',
-      timer: gameOver ? null : this.state.timer,
+      speed: this.props.speed || 2,
+      timer: gameOver ? null : timer,
     });
   }
 

@@ -4,7 +4,7 @@ import GamePanel from './GamePanel';
 
 describe('GamePanel', () => {
   test('detects when a tetromino has landed', () => {
-    const panel = new GamePanel();
+    const panel = new GamePanel({});
 
     panel.state.currentTetromino = new Tetromino('I');
     expect(panel.landed()).toBe(false);
