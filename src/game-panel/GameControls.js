@@ -2,6 +2,7 @@ import React from 'react';
 
 type Props = {
   playing: boolean;
+  level: number;
   pause: () => void;
 };
 
@@ -19,6 +20,8 @@ function GameControls(props: Props) {
       <button type="button" onClick={props.pause} disabled={!props.playing}>
         PAUSE
       </button>
+
+      <span>CURRENT LEVEL: {props.level}</span>
     </div>
   );
 }

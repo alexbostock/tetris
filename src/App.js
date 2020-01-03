@@ -11,7 +11,7 @@ function App() {
         <h1>Tetris</h1>
       </header>
       <main>
-        <GamePanel />
+        <GamePanel marathonMode={true} />
       </main>
     </div>
   );

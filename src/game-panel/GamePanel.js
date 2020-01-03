@@ -12,16 +12,22 @@ import wallKicks from './wallKicks';
 export type GameState = 'preStart' | 'paused' | 'gameOver' | 'playing';
 
 type Props = {
-  speed?: number, // ticks / second
+  marathonMode: boolean,
 };
 
 type State = {
   currentTetromino: Tetromino,
   staticBlocks: Set<Position>,
   gameState: GameState,
-  speed: number,
+  currentLevel: number,
+  linesClearedSinceLastLevelUp: number,
   timer: ?IntervalID,
 };
+
+// level -> ticks / second
+const gravityTable = [
+  1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.4, 2.8, 3.2, 3.6, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+];
 
 class GamePanel extends React.PureComponent<Props, State> {
   constructor(props: Props) {
@@ -31,7 +37,8 @@ class GamePanel extends React.PureComponent<Props, State> {
       currentTetromino: tetrominoGenerator.next(),
       staticBlocks: Set<Position>(),
       gameState: 'preStart',
-      speed: props.speed || 2,
+      currentLevel: 1,
+      linesClearedSinceLastLevelUp: 0,
       timer: null,
     };
   }
@@ -53,6 +60,7 @@ class GamePanel extends React.PureComponent<Props, State> {
 
         <GameControls
           playing={this.state.gameState === 'playing'}
+          level={this.state.currentLevel}
           pause={this.pause}
         />
       </div>
@@ -60,7 +68,8 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   startGame = () => {
-    const speed = this.props.speed || 2;
+    const level = this.state.gameState === 'gameOver' ? 1 : this.state.currentLevel;
+    const speed = gravityTable[level - 1];
     const interval = 1000 / speed;
     const timer = setInterval(this.tick, interval);
 
@@ -75,7 +84,7 @@ class GamePanel extends React.PureComponent<Props, State> {
       currentTetromino: tet,
       staticBlocks: statics,
       gameState: 'playing',
-      speed: this.props.speed,
+      currentLevel: level,
       timer: timer,
     });
   }
@@ -103,7 +112,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     let gameOver = false
     if (this.landed()) {
       statics = statics.union(tet.occupiedCells());
-      statics = clearRows(statics);
+      statics = this.clearRows(statics);
       
       tet = tetrominoGenerator.next();
 
@@ -118,21 +127,37 @@ class GamePanel extends React.PureComponent<Props, State> {
       tet = this.state.currentTetromino.advance();
     }
 
-    let timer = this.state.timer;
-    if (!gameOver && this.props.speed !== this.state.speed) {
-      clearInterval(this.state.timer);
-      const speed = this.props.speed || 2;
-      const interval = 1000 / speed;
-      timer = setInterval(this.tick, interval);
-    }
-
     this.setState({
       currentTetromino: tet,
       staticBlocks: statics,
       gameState: gameOver ? 'gameOver' : 'playing',
-      speed: this.props.speed || 2,
-      timer: gameOver ? null : timer,
+      timer: gameOver ? null : this.state.timer,
     });
+  }
+
+  advanceLevel(numLevels: number) {
+    if (this.state.currentLevel + 1 === gravityTable.length) {
+      return;
+    }
+
+    if (numLevels === 0) {
+      return;
+    }
+
+    const level = Math.min(this.state.currentLevel + numLevels, gravityTable.length - 1);
+
+    if (this.state.timer) {
+      clearInterval(this.state.timer);
+    }
+
+    const speed = gravityTable[level - 1];
+    const interval = 1000 / speed;
+    const timer = setInterval(this.tick, interval);
+
+    this.setState({
+      currentLevel: level,
+      timer: timer,
+    })
   }
 
   handleKey = (event: SyntheticKeyboardEvent<*>) => {
@@ -203,7 +228,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     }
 
     let statics = this.state.staticBlocks.union(tet.occupiedCells());
-    statics = clearRows(statics);
+    statics = this.clearRows(statics);
 
     tet = tetrominoGenerator.next();
     let gameOver = false;
@@ -274,6 +299,29 @@ class GamePanel extends React.PureComponent<Props, State> {
 
     return tet;
   }
+
+  clearRows(cells: Set<Position>) {
+    let numCleared = 0;
+
+    for (let rowNum = 0; rowNum < 20; rowNum++) {
+      const row = cells.filter(pos => pos.y === rowNum);
+      if (row.count() === 10) {
+        cells = cells.subtract(row);
+        cells = cells.map(pos => pos.y < rowNum ? pos.downOne() : pos);
+        numCleared++;
+      }
+    }
+
+    numCleared += this.state.linesClearedSinceLastLevelUp;
+    const numLevelsUp = Math.floor(numCleared / 10);
+    numCleared %= 10;
+
+    this.advanceLevel(numLevelsUp);
+
+    this.setState({linesClearedSinceLastLevelUp: numCleared});
+
+    return cells;
+  }
 }
 
 function withinBounds(tet: Tetromino) {
@@ -288,18 +336,6 @@ function withinBounds(tet: Tetromino) {
 
 function overlap(a: Tetromino, b: Set<Position>) {
   return a.occupiedCells().intersect(b).count() > 0;
-}
-
-function clearRows(cells: Set<Position>) {
-  for (let rowNum = 0; rowNum < 20; rowNum++) {
-    const row = cells.filter(pos => pos.y === rowNum);
-    if (row.count() === 10) {
-      cells = cells.subtract(row);
-      cells = cells.map(pos => pos.y < rowNum ? pos.downOne() : pos);
-    }
-  }
-
-  return cells;
 }
 
 export default GamePanel;
