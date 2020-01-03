@@ -20,14 +20,20 @@ type State = {
   staticBlocks: Set<Position>,
   gameState: GameState,
   currentLevel: number,
+  currentScore: number,
   linesClearedSinceLastLevelUp: number,
   timer: ?IntervalID,
 };
 
 // level -> ticks / second
 const gravityTable = [
-  1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.4, 2.8, 3.2, 3.6, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6,
+  1.6, 1.7, 1.8, 1.9, 2,
+  2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.5, 5,
 ];
+
+// numRowsCleared -> score
+const scoreDeltaTable = [0, 100, 300, 500, 800];
 
 class GamePanel extends React.PureComponent<Props, State> {
   constructor(props: Props) {
@@ -38,6 +44,7 @@ class GamePanel extends React.PureComponent<Props, State> {
       staticBlocks: Set<Position>(),
       gameState: 'preStart',
       currentLevel: 1,
+      currentScore: 0,
       linesClearedSinceLastLevelUp: 0,
       timer: null,
     };
@@ -61,6 +68,7 @@ class GamePanel extends React.PureComponent<Props, State> {
         <GameControls
           playing={this.state.gameState === 'playing'}
           level={this.state.currentLevel}
+          score={this.state.currentScore}
           pause={this.pause}
         />
       </div>
@@ -85,6 +93,7 @@ class GamePanel extends React.PureComponent<Props, State> {
       staticBlocks: statics,
       gameState: 'playing',
       currentLevel: level,
+      currentScore: this.state.gameState === 'gameOver' ? 0 : this.state.currentScore,
       timer: timer,
     });
   }
@@ -312,13 +321,18 @@ class GamePanel extends React.PureComponent<Props, State> {
       }
     }
 
+    const score = scoreDeltaTable[numCleared];
+
     numCleared += this.state.linesClearedSinceLastLevelUp;
     const numLevelsUp = Math.floor(numCleared / 10);
     numCleared %= 10;
 
     this.advanceLevel(numLevelsUp);
 
-    this.setState({linesClearedSinceLastLevelUp: numCleared});
+    this.setState({
+      currentScore: this.state.currentScore + score,
+      linesClearedSinceLastLevelUp: numCleared,
+    });
 
     return cells;
   }

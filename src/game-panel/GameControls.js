@@ -3,6 +3,7 @@ import React from 'react';
 type Props = {
   playing: boolean;
   level: number;
+  score: number;
   pause: () => void;
 };
 
@@ -21,7 +22,8 @@ function GameControls(props: Props) {
         PAUSE
       </button>
 
-      <span>CURRENT LEVEL: {props.level}</span>
+      <p>CURRENT LEVEL: {props.level}</p>
+      <p>CURRENT SCORE: {props.score}</p>
     </div>
   );
 }
