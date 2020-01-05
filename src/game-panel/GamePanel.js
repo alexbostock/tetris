@@ -75,11 +75,25 @@ class GamePanel extends React.PureComponent<Props, State> {
     );
   }
 
-  startGame = () => {
-    const level = this.state.gameState === 'gameOver' ? 1 : this.state.currentLevel;
+  setTimer(level: number = this.state.currentLevel) {
+    this.stopTimer();
+
     const speed = gravityTable[level - 1];
     const interval = 1000 / speed;
     const timer = setInterval(this.tick, interval);
+
+    this.setState({timer: timer});
+  }
+
+  stopTimer() {
+    clearInterval(this.state.timer);
+
+    this.setState({timer: null});
+  }
+
+  startGame = () => {
+    const level = this.state.gameState === 'gameOver' ? 1 : this.state.currentLevel;
+    this.setTimer(level);
 
     let tet = this.state.currentTetromino;
     let statics = this.state.staticBlocks;
@@ -94,18 +108,14 @@ class GamePanel extends React.PureComponent<Props, State> {
       gameState: 'playing',
       currentLevel: level,
       currentScore: this.state.gameState === 'gameOver' ? 0 : this.state.currentScore,
-      timer: timer,
     });
   }
 
   pause = () => {
-    if (this.state.timer) {
-      clearInterval(this.state.timer);
-    }
+    this.stopTimer();
 
     this.setState({
       gameState: 'paused',
-      timer: null,
     });
   }
 
@@ -128,9 +138,7 @@ class GamePanel extends React.PureComponent<Props, State> {
       while (overlap(tet, statics)) {
         gameOver = true;
         tet = tet.upOne();
-        if (this.state.timer) {
-          clearInterval(this.state.timer);
-        }
+        this.stopTimer();
       }
     } else {
       tet = this.state.currentTetromino.advance();
@@ -140,11 +148,14 @@ class GamePanel extends React.PureComponent<Props, State> {
       currentTetromino: tet,
       staticBlocks: statics,
       gameState: gameOver ? 'gameOver' : 'playing',
-      timer: gameOver ? null : this.state.timer,
     });
   }
 
   advanceLevel(numLevels: number) {
+    if (this.state.gameState === 'gameOver') {
+      return;
+    }
+
     if (this.state.currentLevel + 1 === gravityTable.length) {
       return;
     }
@@ -155,17 +166,10 @@ class GamePanel extends React.PureComponent<Props, State> {
 
     const level = Math.min(this.state.currentLevel + numLevels, gravityTable.length - 1);
 
-    if (this.state.timer) {
-      clearInterval(this.state.timer);
-    }
-
-    const speed = gravityTable[level - 1];
-    const interval = 1000 / speed;
-    const timer = setInterval(this.tick, interval);
+    this.setTimer(level);
 
     this.setState({
       currentLevel: level,
-      timer: timer,
     })
   }
 
@@ -185,7 +189,7 @@ class GamePanel extends React.PureComponent<Props, State> {
         this.moveRight();
         break;
       case 'ArrowDown':
-        this.tick();
+        this.softDrop();
         break;
       
       // Rotate left: z key on QWERTY, or same keyboard position on Dvorak.
@@ -216,6 +220,16 @@ class GamePanel extends React.PureComponent<Props, State> {
     return overlap(tet.advance(), this.state.staticBlocks);
   }
 
+  softDrop() {
+    if (!this.state.timer) {
+      return;
+    }
+
+    this.tick();
+
+    this.setTimer();
+  }
+
   moveRight() {
     const tet = this.state.currentTetromino.rightOne();
     if (withinBounds(tet) && !overlap(tet, this.state.staticBlocks)) {
@@ -244,16 +258,13 @@ class GamePanel extends React.PureComponent<Props, State> {
     while (overlap(tet, statics)) {
       gameOver = true;
       tet = tet.upOne();
-      if (this.state.timer) {
-        clearInterval(this.state.timer);
-      }
+      this.stopTimer();
     }
 
     this.setState({
       currentTetromino: tet,
       staticBlocks: statics,
       gameState: gameOver ? 'gameOver' : 'playing',
-      timer: gameOver ? null : this.state.timer,
     });
   }
 
