@@ -79,7 +79,7 @@ class Tetromino {
     return t;
   }
 
-  transform(delta: Position) {
+  translate(delta: Position) {
     const t = new Tetromino(this.type, this.pos.add(delta));
     t.orientation = this.orientation;
 

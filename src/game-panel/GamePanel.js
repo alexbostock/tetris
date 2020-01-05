@@ -36,19 +36,15 @@ const gravityTable = [
 const scoreDeltaTable = [0, 100, 300, 500, 800];
 
 class GamePanel extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      currentTetromino: tetrominoGenerator.next(),
-      staticBlocks: Set<Position>(),
-      gameState: 'preStart',
-      currentLevel: 1,
-      currentScore: 0,
-      linesClearedSinceLastLevelUp: 0,
-      timer: null,
-    };
-  }
+  state = {
+    currentTetromino: tetrominoGenerator.next(),
+    staticBlocks: Set<Position>(),
+    gameState: 'preStart',
+    currentLevel: 1,
+    currentScore: 0,
+    linesClearedSinceLastLevelUp: 0,
+    timer: null,
+  };
 
   render() {
     return (
@@ -78,8 +74,8 @@ class GamePanel extends React.PureComponent<Props, State> {
   setTimer(level: number = this.state.currentLevel) {
     this.stopTimer();
 
-    const speed = gravityTable[level - 1];
-    const interval = 1000 / speed;
+    const speed = gravityTable[level - 1];  // ticks / second
+    const interval = 1000 / speed;          // milliseconds / tick
     const timer = setInterval(this.tick, interval);
 
     this.setState({timer: timer});
@@ -92,22 +88,17 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   startGame = () => {
-    const level = this.state.gameState === 'gameOver' ? 1 : this.state.currentLevel;
+    const gameOver = this.state.gameState === 'gameOver';
+
+    const level = gameOver ? 1 : this.state.currentLevel;
     this.setTimer(level);
 
-    let tet = this.state.currentTetromino;
-    let statics = this.state.staticBlocks;
-    if (this.state.gameState === 'gameOver') {
-      tet = tetrominoGenerator.next();
-      statics = Set<Position>();
-    }
-
     this.setState({
-      currentTetromino: tet,
-      staticBlocks: statics,
+      currentTetromino: gameOver ? tetrominoGenerator.next() : this.state.currentTetromino,
+      staticBlocks: gameOver ? Set<Position>() : this.state.staticBlocks,
       gameState: 'playing',
       currentLevel: level,
-      currentScore: this.state.gameState === 'gameOver' ? 0 : this.state.currentScore,
+      currentScore: gameOver ? 0 : this.state.currentScore,
     });
   }
 
@@ -125,16 +116,14 @@ class GamePanel extends React.PureComponent<Props, State> {
     }
   }
 
-  tick = () => {
-    let tet = this.state.currentTetromino;
+  tick = (tet: Tetromino = this.state.currentTetromino) => {
     let statics = this.state.staticBlocks;
     let gameOver = false
-    if (this.landed()) {
+    if (this.landed(tet)) {
       statics = statics.union(tet.occupiedCells());
       statics = this.clearRows(statics);
       
       tet = tetrominoGenerator.next();
-
       while (overlap(tet, statics)) {
         gameOver = true;
         tet = tet.upOne();
@@ -213,20 +202,19 @@ class GamePanel extends React.PureComponent<Props, State> {
   landed(tet: Tetromino = this.state.currentTetromino) {
     const lowestRow = tet.occupiedCells()
       .reduce((acc: number, cell: Position) => Math.max(acc, cell.y), -1);
-    if (lowestRow === 19) {
-      return true;
-    }
 
-    return overlap(tet.advance(), this.state.staticBlocks);
+    return lowestRow === 19 || overlap(tet.advance(), this.state.staticBlocks);
   }
 
   softDrop() {
-    if (!this.state.timer) {
+    if (this.state.gameState !== 'playing') {
       return;
     }
 
     this.tick();
 
+    // Reset timer to avoid two ticks very close to each other when a hard drop
+    // input conincides with a normal clock tick.
     this.setTimer();
   }
 
@@ -245,49 +233,41 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   hardDrop() {
-    let tet = this.state.currentTetromino;
-    while (!this.landed(tet)) {
-      tet = tet.downOne();
-    }
+    const tet = this.shadow();
 
-    let statics = this.state.staticBlocks.union(tet.occupiedCells());
-    statics = this.clearRows(statics);
-
-    tet = tetrominoGenerator.next();
-    let gameOver = false;
-    while (overlap(tet, statics)) {
-      gameOver = true;
-      tet = tet.upOne();
-      this.stopTimer();
-    }
-
-    this.setState({
-      currentTetromino: tet,
-      staticBlocks: statics,
-      gameState: gameOver ? 'gameOver' : 'playing',
-    });
+    this.tick(tet);
   }
 
   rotateLeft() {
-    const fromOrientation = this.state.currentTetromino.orientation;
     const tet = this.state.currentTetromino.rotateLeft();
+
+    const fromOrientation = this.state.currentTetromino.orientation;
     const toOrientation = tet.orientation;
 
     this.wallKick(tet, fromOrientation, toOrientation);
   }
 
   rotateRight() {
-    const fromOrientation = this.state.currentTetromino.orientation;
     const tet = this.state.currentTetromino.rotateRight();
+
+    const fromOrientation = this.state.currentTetromino.orientation;
     const toOrientation = tet.orientation;
 
     this.wallKick(tet, fromOrientation, toOrientation);
   }
 
   wallKick(tet: Tetromino, from: number, to: number) {
+    // tet should be a tetromino after basic rotation around its centre.
+    // wallKicks.js defines a set of translations for each type of rotation.
+    // Try each translation in order and select the first one which results in
+    // a valid tetromino position. A valid position has the tetromino within
+    // bounds, and not overlapping any obstacle. If no valid translation exists,
+    // make no changes (abort the rotation).
+
     let transformations;
     switch (tet.type) {
       case 'O':
+        // The O tetromino has order 4 rotational symmetry, so rotation is a NOP.
         transformations = [new Position(0, 0)];
         break;
       case 'I':
@@ -298,13 +278,13 @@ class GamePanel extends React.PureComponent<Props, State> {
         break;
     }
 
-    const pred = (tet: Tetromino) => {
+    const valid = (tet: Tetromino) => {
       return !overlap(tet, this.state.staticBlocks) && withinBounds(tet);
     };
 
     for (const t of transformations) {
-      const transformed = tet.transform(t);
-      if (pred(transformed)) {
+      const transformed = tet.translate(t);
+      if (valid(transformed)) {
         this.setState({ currentTetromino: transformed });
         return;
       }
