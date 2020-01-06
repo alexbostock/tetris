@@ -5,6 +5,7 @@ import { Set } from 'immutable';
 
 import Position from './Position';
 import Tetromino, { tetrominoGenerator } from './Tetromino';
+import type { TetrominoType } from './Tetromino';
 import GameCanvas from './GameCanvas';
 import GameControls from './GameControls';
 import wallKicks from './wallKicks';
@@ -21,6 +22,7 @@ type State = {
   gameState: GameState,
   currentLevel: number,
   currentScore: number,
+  heldTetromino: ?TetrominoType,
   linesClearedSinceLastLevelUp: number,
   timer: ?IntervalID,
 };
@@ -42,6 +44,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     gameState: 'preStart',
     currentLevel: 1,
     currentScore: 0,
+    heldTetromino: null,
     linesClearedSinceLastLevelUp: 0,
     timer: null,
   };
@@ -65,6 +68,8 @@ class GamePanel extends React.PureComponent<Props, State> {
           playing={this.state.gameState === 'playing'}
           level={this.state.currentLevel}
           score={this.state.currentScore}
+          heldTetromino={this.state.heldTetromino}
+          holdTetromino={this.holdTetromino}
           pause={this.pause}
         />
       </div>
@@ -99,6 +104,7 @@ class GamePanel extends React.PureComponent<Props, State> {
       gameState: 'playing',
       currentLevel: level,
       currentScore: gameOver ? 0 : this.state.currentScore,
+      heldTetromino: gameOver ? null : this.state.heldTetromino,
     });
   }
 
@@ -326,6 +332,17 @@ class GamePanel extends React.PureComponent<Props, State> {
     });
 
     return cells;
+  }
+
+  holdTetromino = () => {
+    const held = this.state.heldTetromino;
+
+    const tet = held ? new Tetromino(held) : tetrominoGenerator.next();
+
+    this.setState({
+      currentTetromino: tet,
+      heldTetromino: this.state.currentTetromino.type,
+    });
   }
 }
 

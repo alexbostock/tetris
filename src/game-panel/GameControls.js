@@ -1,15 +1,22 @@
 import React from 'react';
 
+import HeldTetromino from './HeldTetromino';
+import type { TetrominoType } from './Tetromino';
+
 type Props = {
   playing: boolean;
   level: number;
   score: number;
+  heldTetromino: ?TetrominoType;
+  holdTetromino: () => void,
   pause: () => void;
 };
 
 function GameControls(props: Props) {
   return (
     <div id="gameControls">
+      <HeldTetromino type={props.heldTetromino} action={props.holdTetromino} />
+
       <ul>
         <li>LEFT / RIGHT: MOVE TETROMINO</li>
         <li>DOWN: SOFT DROP</li>

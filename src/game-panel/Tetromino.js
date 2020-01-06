@@ -4,7 +4,7 @@ import { Set } from 'immutable';
 
 import Position from './Position';
 
-type TetrominoType =
+export type TetrominoType =
   | 'I'
   | 'J'
   | 'L'
