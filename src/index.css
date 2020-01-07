@@ -25,12 +25,33 @@ button:hover {
     margin: 0.5em;
 }
 
-#gameCanvas {
+#heldTetrominoButton {
+    display: grid;
+
+    height: 6em;
+    width: 6em;
+
+    padding: 0;
+
+    background-color: grey;
+}
+
+#gameCanvas, #heldTetromino {
+    display: grid;
+    
     border: 1px solid white;
     padding: 0.5px;
 }
 
-#gameCanvas > * {
+#heldTetromino {
+    grid-column: 1;
+    grid-row: 1;
+
+    border: none;
+    margin: auto;
+}
+
+#gameCanvas > *, #heldTetromino > * {
     border: 0.5px solid white;
 }
 

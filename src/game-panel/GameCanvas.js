@@ -3,6 +3,7 @@
 import React from 'react';
 import { Set } from 'immutable';
 
+import Mino from './Mino';
 import Position from './Position';
 import Tetromino from './Tetromino';
 import StartGameMenu from './StartGameMenu';
@@ -22,10 +23,10 @@ function GameCanvas(props: Props) {
   const width = 10;
 
   const tet = props.tetromino.occupiedCells()
-    .map(pos => Mino(pos, props.tetromino.color()))
+    .map(pos => mino(pos, props.tetromino.color()))
 
   const shadow = props.shadow ? props.shadow.occupiedCells()
-    .map(pos => Mino(pos, props.tetromino.color(), 0.4)) : null;
+    .map(pos => mino(pos, props.tetromino.color(), 0.4)) : null;
 
   return (
     <div
@@ -33,14 +34,13 @@ function GameCanvas(props: Props) {
       style={{
         height: height + 'em',
         width: width + 'em',
-        display: 'grid',
         gridTemplateColumns: `repeat(${width}, 1fr)`,
         gridTemplateRows: `repeat(${height}, 1fr)`,
       }}
     >
       {shadow}
       {tet}
-      {props.staticBlocks.map(pos => Mino(pos, 'brown'))}
+      {props.staticBlocks.map(pos => mino(pos, 'brown'))}
       {
         props.gameState === 'playing' ? null :
         <StartGameMenu gameState={props.gameState} startGame={props.startGame} />
@@ -49,19 +49,15 @@ function GameCanvas(props: Props) {
   );
 }
 
-function Mino(pos: Position, colour: string, opacity = 1) {
-  if (pos.y < 0) {
-    return null;
-  }
-
-  const style = {
-    gridColumn: pos.x + 1,
-    gridRow: pos.y + 1,
-    backgroundColor: colour,
-    opacity: opacity,
-  };
-
-  return <div key={pos.x + ',' + pos.y} className="mino" style={style}></div>;
+function mino(pos: Position, colour: string, opacity: number = 1) {
+  return (
+    <Mino
+      key={pos.x + ',' + pos.y}
+      pos={pos}
+      colour={colour}
+      opacity={opacity}
+    />
+  );
 }
 
 export default GameCanvas;

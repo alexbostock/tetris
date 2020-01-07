@@ -5,7 +5,6 @@ exports[`correctly renders minos described by props 1`] = `
   id="gameCanvas"
   style={
     Object {
-      "display": "grid",
       "gridTemplateColumns": "repeat(10, 1fr)",
       "gridTemplateRows": "repeat(20, 1fr)",
       "height": "20em",
@@ -107,7 +106,6 @@ exports[`correctly renders minos described by props 2`] = `
   id="gameCanvas"
   style={
     Object {
-      "display": "grid",
       "gridTemplateColumns": "repeat(10, 1fr)",
       "gridTemplateRows": "repeat(20, 1fr)",
       "height": "20em",
@@ -212,7 +210,6 @@ exports[`correctly renders minos described by props 3`] = `
   id="gameCanvas"
   style={
     Object {
-      "display": "grid",
       "gridTemplateColumns": "repeat(10, 1fr)",
       "gridTemplateRows": "repeat(20, 1fr)",
       "height": "20em",
