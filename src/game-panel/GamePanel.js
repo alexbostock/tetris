@@ -187,6 +187,10 @@ class GamePanel extends React.PureComponent<Props, State> {
         this.softDrop();
         break;
       
+      case ' ':
+        this.holdTetromino();
+        break;
+      
       // Rotate left: z key on QWERTY, or same keyboard position on Dvorak.
       case 'z':
       case ';':

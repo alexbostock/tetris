@@ -25,7 +25,7 @@ function GameControls(props: Props) {
         <li>UP: HARD DROP</li>
         <li>Z: ROTATE LEFT</li>
         <li>X: ROTATE RIGHT</li>
-        <li>BUTTON ABOVE: SWAP HELD TETROMINO</li>
+        <li>SPACE: SWAP HELD TETROMINO</li>
       </ul>
 
       <button type="button" onClick={props.pause} disabled={!props.playing}>
