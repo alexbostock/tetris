@@ -19,6 +19,7 @@ function GameInfo(props: Props) {
         <li>Z: ROTATE LEFT</li>
         <li>X: ROTATE RIGHT</li>
         <li>SPACE: SWAP HELD TETROMINO</li>
+        <li>P: PAUSE / RESUME</li>
       </ul>
 
       <p>CURRENT LEVEL: {props.level}</p>

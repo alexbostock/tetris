@@ -141,7 +141,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     if (this.landed(tet)) {
       statics = statics.union(tet.occupiedCells());
       statics = this.clearRows(statics);
-      
+
       tet = tetrominoGenerator.next();
       while (overlap(tet, statics)) {
         gameOver = true;
@@ -182,6 +182,16 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   handleKey = (key: string) => {
+    if (key === 'p') {
+      if (this.state.gameState === 'playing') {
+        this.pause();
+      } else {
+        this.startGame();
+      }
+
+      return;
+    }
+
     if (this.state.gameState !== 'playing') {
       return;
     }
@@ -199,23 +209,23 @@ class GamePanel extends React.PureComponent<Props, State> {
       case 'ArrowDown':
         this.softDrop();
         break;
-      
+
       case ' ':
         this.holdTetromino();
         break;
-      
+
       // Rotate left: z key on QWERTY, or same keyboard position on Dvorak.
       case 'z':
       case ';':
         this.rotateLeft();
         break;
-      
+
       // Rotate right: x key on QWERTY, or same keyboard position on Dvorak.
       case 'x':
       case 'q':
         this.rotateRight();
         break;
-      
+
       default:
         // Ignore other keys.
         break;
