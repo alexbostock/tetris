@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react';
 import { Set } from 'immutable';
 
@@ -40,7 +38,7 @@ const scoreDeltaTable = [0, 100, 300, 500, 800];
 class GamePanel extends React.PureComponent<Props, State> {
   state = {
     currentTetromino: tetrominoGenerator.next(),
-    staticBlocks: Set<Position>(),
+    staticBlocks: Set(),
     gameState: 'preStart',
     currentLevel: 1,
     currentScore: 0,
@@ -53,8 +51,6 @@ class GamePanel extends React.PureComponent<Props, State> {
     return (
       <div
         id="gamePanel"
-        tabIndex="0"
-        onKeyDown={this.handleKey}
       >
         <GameCanvas
           tetromino={this.state.currentTetromino}
@@ -100,7 +96,7 @@ class GamePanel extends React.PureComponent<Props, State> {
 
     this.setState({
       currentTetromino: gameOver ? tetrominoGenerator.next() : this.state.currentTetromino,
-      staticBlocks: gameOver ? Set<Position>() : this.state.staticBlocks,
+      staticBlocks: gameOver ? Set() : this.state.staticBlocks,
       gameState: 'playing',
       currentLevel: level,
       currentScore: gameOver ? 0 : this.state.currentScore,
@@ -113,6 +109,12 @@ class GamePanel extends React.PureComponent<Props, State> {
 
     this.setState({
       gameState: 'paused',
+    });
+  }
+
+  componentDidMount() {
+    document.body.addEventListener('keydown', event => {
+      this.handleKey(event.key);
     });
   }
 
@@ -168,12 +170,12 @@ class GamePanel extends React.PureComponent<Props, State> {
     })
   }
 
-  handleKey = (event: SyntheticKeyboardEvent<*>) => {
+  handleKey = (key: string) => {
     if (this.state.gameState !== 'playing') {
       return;
     }
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowLeft':
         this.moveLeft();
         break;
