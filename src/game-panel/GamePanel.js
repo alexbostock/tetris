@@ -6,6 +6,7 @@ import Tetromino, { tetrominoGenerator } from './Tetromino';
 import type { TetrominoType } from './Tetromino';
 import GameCanvas from './GameCanvas';
 import GameControls from './GameControls';
+import GameInfo from './GameInfo';
 import wallKicks from './wallKicks';
 
 export type GameState = 'preStart' | 'paused' | 'gameOver' | 'playing';
@@ -52,6 +53,11 @@ class GamePanel extends React.PureComponent<Props, State> {
       <div
         id="gamePanel"
       >
+        <GameInfo
+          level={this.state.currentLevel}
+          score={this.state.currentScore}
+        />
+
         <GameCanvas
           tetromino={this.state.currentTetromino}
           staticBlocks={this.state.staticBlocks}
@@ -62,11 +68,16 @@ class GamePanel extends React.PureComponent<Props, State> {
 
         <GameControls
           playing={this.state.gameState === 'playing'}
-          level={this.state.currentLevel}
-          score={this.state.currentScore}
           heldTetromino={this.state.heldTetromino}
           holdTetromino={this.holdTetromino}
           pause={this.pause}
+
+          moveLeft={this.moveLeft}
+          moveRight={this.moveRight}
+          hardDrop={this.hardDrop}
+          softDrop={this.softDrop}
+          rotateLeft={this.rotateLeft}
+          rotateRight={this.rotateRight}
         />
       </div>
     );
@@ -218,7 +229,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     return lowestRow === 19 || overlap(tet.advance(), this.state.staticBlocks);
   }
 
-  softDrop() {
+  softDrop = () => {
     if (this.state.gameState !== 'playing') {
       return;
     }
@@ -230,27 +241,27 @@ class GamePanel extends React.PureComponent<Props, State> {
     this.setTimer();
   }
 
-  moveRight() {
+  moveRight = () => {
     const tet = this.state.currentTetromino.rightOne();
     if (withinBounds(tet) && !overlap(tet, this.state.staticBlocks)) {
       this.setState({ currentTetromino: tet });
     }
   }
 
-  moveLeft() {
+  moveLeft = () => {
     const tet = this.state.currentTetromino.leftOne();
     if (withinBounds(tet) && !overlap(tet, this.state.staticBlocks)) {
       this.setState({ currentTetromino: tet });
     }
   }
 
-  hardDrop() {
+  hardDrop = () => {
     const tet = this.shadow();
 
     this.tick(tet);
   }
 
-  rotateLeft() {
+  rotateLeft = () => {
     const tet = this.state.currentTetromino.rotateLeft();
 
     const fromOrientation = this.state.currentTetromino.orientation;
@@ -259,7 +270,7 @@ class GamePanel extends React.PureComponent<Props, State> {
     this.wallKick(tet, fromOrientation, toOrientation);
   }
 
-  rotateRight() {
+  rotateRight = () => {
     const tet = this.state.currentTetromino.rotateRight();
 
     const fromOrientation = this.state.currentTetromino.orientation;

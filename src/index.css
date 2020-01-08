@@ -65,3 +65,13 @@ button:hover {
 
     padding: 1em;
 }
+
+#touchControls {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#touchControls > button:hover {
+    text-decoration: none;
+}

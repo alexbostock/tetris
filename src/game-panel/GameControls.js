@@ -7,11 +7,16 @@ import type { TetrominoType } from './Tetromino';
 
 type Props = {
   playing: boolean;
-  level: number;
-  score: number;
   heldTetromino: ?TetrominoType;
   holdTetromino: () => void,
   pause: () => void;
+
+  moveLeft: () => void;
+  moveRight: () => void;
+  hardDrop: () => void;
+  softDrop: () => void;
+  rotateLeft: () => void;
+  rotateRight: () => void;
 };
 
 function GameControls(props: Props) {
@@ -19,21 +24,18 @@ function GameControls(props: Props) {
     <div id="gameControls">
       <HeldTetromino type={props.heldTetromino} action={props.holdTetromino} />
 
-      <ul>
-        <li>LEFT / RIGHT: MOVE TETROMINO</li>
-        <li>DOWN: SOFT DROP</li>
-        <li>UP: HARD DROP</li>
-        <li>Z: ROTATE LEFT</li>
-        <li>X: ROTATE RIGHT</li>
-        <li>SPACE: SWAP HELD TETROMINO</li>
-      </ul>
-
       <button type="button" onClick={props.pause} disabled={!props.playing}>
         PAUSE
       </button>
 
-      <p>CURRENT LEVEL: {props.level}</p>
-      <p>CURRENT SCORE: {props.score}</p>
+      <div id="touchControls">
+        <button type="button" onClick={props.moveLeft}>&lt;</button>
+        <button type="button" onClick={props.softDrop}>v</button>
+        <button type="button" onClick={props.moveRight}>&gt;</button>
+        <button type="button" onClick={props.rotateLeft}>i</button>
+        <button type="button" onClick={props.hardDrop}>V</button>
+        <button type="button" onClick={props.rotateRight}>-i</button>
+      </div>
     </div>
   );
 }
