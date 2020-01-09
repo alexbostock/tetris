@@ -5,6 +5,7 @@ import React from 'react'
 type Props = {
   level: number;
   score: number;
+  highscore: number;
 };
 
 function GameInfo(props: Props) {
@@ -24,6 +25,7 @@ function GameInfo(props: Props) {
 
       <p>CURRENT LEVEL: {props.level}</p>
       <p>CURRENT SCORE: {props.score}</p>
+      <p>HIGHSCORE: {props.highscore}</p>
     </div>
   )
 }

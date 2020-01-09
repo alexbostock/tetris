@@ -43,7 +43,10 @@ function GameCanvas(props: Props) {
       {props.staticBlocks.map(pos => mino(pos, 'brown'))}
       {
         props.gameState === 'playing' ? null :
-        <StartGameMenu gameState={props.gameState} startGame={props.startGame} />
+        <StartGameMenu
+          gameState={props.gameState}
+          startGame={props.startGame}
+        />
       }
     </div>
   );

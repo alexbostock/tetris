@@ -1,6 +1,7 @@
 import React from 'react';
 import { Set } from 'immutable';
 
+import highscoreManager from './highscoreManager';
 import Position from './Position';
 import Tetromino, { tetrominoGenerator } from './Tetromino';
 import type { TetrominoType } from './Tetromino';
@@ -56,6 +57,7 @@ class GamePanel extends React.PureComponent<Props, State> {
         <GameInfo
           level={this.state.currentLevel}
           score={this.state.currentScore}
+          highscore={highscoreManager.localHighscore()}
         />
 
         <GameCanvas
@@ -147,6 +149,8 @@ class GamePanel extends React.PureComponent<Props, State> {
         gameOver = true;
         tet = tet.upOne();
         this.stopTimer();
+
+        highscoreManager.addScore(this.state.currentScore);
       }
     } else {
       tet = this.state.currentTetromino.advance();
