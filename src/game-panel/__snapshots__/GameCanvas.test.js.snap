@@ -97,6 +97,11 @@ exports[`correctly renders minos described by props 1`] = `
     >
       START GAME
     </button>
+    <button
+      type="button"
+    >
+      SHOW LEADERBOARD
+    </button>
   </div>
 </div>
 `;
@@ -200,6 +205,30 @@ exports[`correctly renders minos described by props 2`] = `
       type="button"
     >
       PLAY AGAIN
+    </button>
+    <form>
+      <h3>
+        SUBMIT TO LEADERBOARD
+      </h3>
+      <label>
+        NICKNAME:
+        <input
+          onChange={[Function]}
+          value=""
+        />
+        <button
+          disabled={false}
+          onClick={[Function]}
+        >
+          SUBMIT
+        </button>
+      </label>
+      <p />
+    </form>
+    <button
+      type="button"
+    >
+      SHOW LEADERBOARD
     </button>
   </div>
 </div>

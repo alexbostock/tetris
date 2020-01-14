@@ -1,5 +1,6 @@
 import React from 'react';
-import { Set } from 'immutable';
+import { List, Set } from 'immutable';
+import axios from 'axios';
 
 import highscoreManager from './highscoreManager';
 import Position from './Position';
@@ -9,6 +10,8 @@ import GameCanvas from './GameCanvas';
 import GameControls from './GameControls';
 import GameInfo from './GameInfo';
 import wallKicks from './wallKicks';
+import Leaderboard from './Leaderboard';
+import type { LeaderboardItem } from './Leaderboard';
 
 export type GameState = 'preStart' | 'paused' | 'gameOver' | 'playing';
 
@@ -25,6 +28,9 @@ type State = {
   heldTetromino: ?TetrominoType,
   linesClearedSinceLastLevelUp: number,
   timer: ?IntervalID,
+  showingLeaderboard: boolean,
+  leaderboardData?: List<LeaderboardItem>,
+  cancelToken: any,
 };
 
 // level -> ticks / second
@@ -47,6 +53,9 @@ class GamePanel extends React.PureComponent<Props, State> {
     heldTetromino: null,
     linesClearedSinceLastLevelUp: 0,
     timer: null,
+
+    showingLeaderboard: false,
+    cancelToken: axios.CancelToken.source(),
   };
 
   render() {
@@ -60,14 +69,7 @@ class GamePanel extends React.PureComponent<Props, State> {
           highscore={highscoreManager.localHighscore()}
         />
 
-        <GameCanvas
-          tetromino={this.state.currentTetromino}
-          staticBlocks={this.state.staticBlocks}
-          shadow={this.shadow()}
-          gameState={this.state.gameState}
-          startGame={this.startGame}
-          score={this.state.currentScore}
-        />
+        {this.canvas()}
 
         <GameControls
           playing={this.state.gameState === 'playing'}
@@ -83,6 +85,29 @@ class GamePanel extends React.PureComponent<Props, State> {
           rotateRight={this.rotateRight}
         />
       </div>
+    );
+  }
+
+  canvas() {
+    if (this.state.showingLeaderboard) {
+      return (
+        <Leaderboard
+          data={this.state.leaderboardData}
+          hideLeaderboard={this.hideLeaderboard}
+        />
+      );
+    }
+
+    return (
+      <GameCanvas
+        tetromino={this.state.currentTetromino}
+        staticBlocks={this.state.staticBlocks}
+        shadow={this.shadow()}
+        gameState={this.state.gameState}
+        startGame={this.startGame}
+        score={this.state.currentScore}
+        showLeaderboard={this.showLeaderboard}
+      />
     );
   }
 
@@ -130,12 +155,16 @@ class GamePanel extends React.PureComponent<Props, State> {
     document.body.addEventListener('keydown', event => {
       this.handleKey(event.key);
     });
+
+    this.loadLeaderboard();
   }
 
   componentWillUnmount() {
     if (this.state.timer) {
       clearInterval(this.state.timer);
     }
+
+    this.state.cancelToken.cancel('Cancelled on unmount');
   }
 
   tick = (tet: Tetromino = this.state.currentTetromino) => {
@@ -376,6 +405,24 @@ class GamePanel extends React.PureComponent<Props, State> {
       heldTetromino: this.state.currentTetromino.type,
     });
   }
+
+  showLeaderboard = () => {
+    this.setState({ showingLeaderboard: true });
+    this.loadLeaderboard();
+  }
+
+  hideLeaderboard = () => {
+    this.setState({ showingLeaderboard: false });
+  }
+
+  loadLeaderboard() {
+    axios.get('https://leaderboard.alexbostock.co.uk/scores/top/10', { cancelToken: this.state.cancelToken.token })
+      .then(res => this.setState({ leaderboardData: parseLeaderboardData(res.data) }))
+      .catch(err => {
+        console.error('Failed to load leaderboard data');
+        console.error(err);
+      });
+  }
 }
 
 function withinBounds(tet: Tetromino) {
@@ -390,6 +437,19 @@ function withinBounds(tet: Tetromino) {
 
 function overlap(a: Tetromino, b: Set<Position>) {
   return a.occupiedCells().intersect(b).count() > 0;
+}
+
+function parseLeaderboardData(data: any) {
+  if (data.status !== 200) {
+    console.error('Unexpected HTTP status');
+    console.error(data);
+    return List();
+  }
+
+  return List(data.data.map(entry => ({
+    nickname: entry.nickname,
+    score: entry.score,
+  })));
 }
 
 export default GamePanel;

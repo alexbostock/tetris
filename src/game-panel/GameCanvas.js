@@ -17,6 +17,7 @@ type Props = {
   gameState: GameState,
   startGame: () => void,
   score: number,
+  showLeaderboard: () => void,
 };
 
 function GameCanvas(props: Props) {
@@ -48,6 +49,7 @@ function GameCanvas(props: Props) {
           gameState={props.gameState}
           startGame={props.startGame}
           score={props.score}
+          showLeaderboard={props.showLeaderboard}
         />
       }
     </div>

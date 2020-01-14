@@ -9,6 +9,7 @@ type Props = {
   gameState: GameState;
   startGame: () => void;
   score: number;
+  showLeaderboard: () => void;
 }
 
 function StartGameMenu(props: Props) {
@@ -19,9 +20,9 @@ function StartGameMenu(props: Props) {
       {props.gameState === 'gameOver' ? <h2>GAME OVER</h2> : null}
       <button type="button" onClick={props.startGame}>{buttonText}</button>
 
-      <button type="button">VIEW LEADERBOARD</button>
-
       {props.gameState === 'gameOver' ? <LeaderboardForm score={props.score} /> : null}
+
+      <button type="button" onClick={props.showLeaderboard}>SHOW LEADERBOARD</button>
     </div>
   );
 }
