@@ -66,6 +66,7 @@ class GamePanel extends React.PureComponent<Props, State> {
           shadow={this.shadow()}
           gameState={this.state.gameState}
           startGame={this.startGame}
+          score={this.state.currentScore}
         />
 
         <GameControls

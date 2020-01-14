@@ -16,6 +16,7 @@ type Props = {
   shadow?: Tetromino,
   gameState: GameState,
   startGame: () => void,
+  score: number,
 };
 
 function GameCanvas(props: Props) {
@@ -46,6 +47,7 @@ function GameCanvas(props: Props) {
         <StartGameMenu
           gameState={props.gameState}
           startGame={props.startGame}
+          score={props.score}
         />
       }
     </div>

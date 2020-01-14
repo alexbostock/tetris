@@ -3,10 +3,12 @@
 import React from 'react';
 
 import type { GameState } from './GamePanel';
+import LeaderboardForm from './LeaderboardForm';
 
 type Props = {
   gameState: GameState;
   startGame: () => void;
+  score: number;
 }
 
 function StartGameMenu(props: Props) {
@@ -16,6 +18,10 @@ function StartGameMenu(props: Props) {
     <div id="startGameMenu">
       {props.gameState === 'gameOver' ? <h2>GAME OVER</h2> : null}
       <button type="button" onClick={props.startGame}>{buttonText}</button>
+
+      <button type="button">VIEW LEADERBOARD</button>
+
+      {props.gameState === 'gameOver' ? <LeaderboardForm score={props.score} /> : null}
     </div>
   );
 }
