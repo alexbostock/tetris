@@ -9,7 +9,7 @@ type Props = {
 
 function LeaderboardForm(props: Props) {
   const [nickname, setNickname] = useState(localStorage.getItem('nickname') || '');
-  const [message, setMessage] = useState(null);
+  const [canSubmitScore, setCanSubmitScore] = useState(true);
   const [saved, setSaved] = useState(false);
 
   const updateNickname = event => {
@@ -29,12 +29,13 @@ function LeaderboardForm(props: Props) {
       score: props.score,
     })
       .then(res => {
-        setMessage('SCORE SAVED TO LEADERBOARD');
         setSaved(true);
       })
-      .catch(err => setMessage('FAILED TO SUBMIT TO LEADERBOARD'));
+      .catch(err => {
+        setCanSubmitScore(true);
+      });
     
-    setMessage('CONNECTING TO LEADERBOARD');
+    setCanSubmitScore(false);
   }
 
   const form = (
@@ -44,7 +45,7 @@ function LeaderboardForm(props: Props) {
       <label>
         NICKNAME:
         <input value={nickname} onChange={updateNickname} />
-        <button onClick={submitForm}>SUBMIT</button>
+        <button onClick={submitForm} disabled={!canSubmitScore}>SUBMIT</button>
       </label>
     </>
   );
@@ -53,9 +54,21 @@ function LeaderboardForm(props: Props) {
     <form>
       {saved ? null : form}
 
-      <p>{message}</p>
+      <p>{message(canSubmitScore, saved)}</p>
     </form>
   );
+}
+
+function message(canSubmit: boolean, saved: boolean) {
+  if (saved) {
+    return 'SAVED';
+  }
+
+  if (!canSubmit) {
+    return 'SAVING';
+  }
+
+  return null;
 }
 
 export default LeaderboardForm;
