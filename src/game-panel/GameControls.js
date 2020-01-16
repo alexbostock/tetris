@@ -22,11 +22,13 @@ type Props = {
 function GameControls(props: Props) {
   return (
     <div id="gameControls">
-      <HeldTetromino type={props.heldTetromino} action={props.holdTetromino} />
+      <div id="otherControls">
+        <HeldTetromino type={props.heldTetromino} action={props.holdTetromino} />
 
-      <button type="button" onClick={props.pause} disabled={!props.playing}>
-        PAUSE
-      </button>
+        <button type="button" onClick={props.pause} disabled={!props.playing}>
+          PAUSE
+        </button>
+      </div>
 
       <div id="touchControls">
         <button type="button" onClick={props.moveLeft}>&lt;</button>

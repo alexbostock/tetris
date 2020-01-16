@@ -19,6 +19,13 @@ button:hover {
 
 #gamePanel {
     display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 800px) {
+    #gamePanel {
+        flex-direction: row;
+    }
 }
 
 #gamePanel > * {
@@ -43,6 +50,10 @@ button:hover {
     padding: 0.5px;
 }
 
+#gameCanvas {
+    margin: auto;
+}
+
 #heldTetromino {
     grid-column: 1;
     grid-row: 1;
@@ -61,7 +72,7 @@ button:hover {
 
 #startGameMenu {
     grid-column: 2/10;
-    grid-row: 5/16;
+    grid-row: 4/17;
 
     text-align: center;
 
@@ -70,6 +81,22 @@ button:hover {
     padding: 1em;
 
     z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#startGameMenu > * {
+    margin: auto;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+#gameControls {
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 #touchControls {
@@ -80,4 +107,15 @@ button:hover {
 
 #touchControls > button:hover {
     text-decoration: none;
+}
+
+#otherControls {
+    display: flex;
+    flex-direction: row;
+
+    padding: 1em;
+}
+
+#otherControls > * {
+    margin: auto;
 }

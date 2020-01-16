@@ -7,8 +7,8 @@ exports[`correctly renders minos described by props 1`] = `
     Object {
       "gridTemplateColumns": "repeat(10, 1fr)",
       "gridTemplateRows": "repeat(20, 1fr)",
-      "height": "20em",
-      "width": "10em",
+      "height": "60vh",
+      "width": "30vh",
     }
   }
 >
@@ -113,8 +113,8 @@ exports[`correctly renders minos described by props 2`] = `
     Object {
       "gridTemplateColumns": "repeat(10, 1fr)",
       "gridTemplateRows": "repeat(20, 1fr)",
-      "height": "20em",
-      "width": "10em",
+      "height": "60vh",
+      "width": "30vh",
     }
   }
 >
@@ -241,8 +241,8 @@ exports[`correctly renders minos described by props 3`] = `
     Object {
       "gridTemplateColumns": "repeat(10, 1fr)",
       "gridTemplateRows": "repeat(20, 1fr)",
-      "height": "20em",
-      "width": "10em",
+      "height": "60vh",
+      "width": "30vh",
     }
   }
 >

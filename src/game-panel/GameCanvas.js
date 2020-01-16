@@ -34,8 +34,8 @@ function GameCanvas(props: Props) {
     <div
       id="gameCanvas"
       style={{
-        height: height + 'em',
-        width: width + 'em',
+        height: height * 3 + 'vh',
+        width: width * 3 + 'vh',
         gridTemplateColumns: `repeat(${width}, 1fr)`,
         gridTemplateRows: `repeat(${height}, 1fr)`,
       }}

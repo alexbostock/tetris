@@ -60,30 +60,32 @@ class GamePanel extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <div
-        id="gamePanel"
-      >
-        <GameInfo
-          level={this.state.currentLevel}
-          score={this.state.currentScore}
-          highscore={highscoreManager.localHighscore()}
-        />
+      <div id="gamePanel">
+        <main>
+          {this.canvas()}
 
-        {this.canvas()}
+          <GameControls
+            playing={this.state.gameState === 'playing'}
+            heldTetromino={this.state.heldTetromino}
+            holdTetromino={this.holdTetromino}
+            pause={this.pause}
 
-        <GameControls
-          playing={this.state.gameState === 'playing'}
-          heldTetromino={this.state.heldTetromino}
-          holdTetromino={this.holdTetromino}
-          pause={this.pause}
+            moveLeft={this.moveLeft}
+            moveRight={this.moveRight}
+            hardDrop={this.hardDrop}
+            softDrop={this.softDrop}
+            rotateLeft={this.rotateLeft}
+            rotateRight={this.rotateRight}
+          />
+        </main>
 
-          moveLeft={this.moveLeft}
-          moveRight={this.moveRight}
-          hardDrop={this.hardDrop}
-          softDrop={this.softDrop}
-          rotateLeft={this.rotateLeft}
-          rotateRight={this.rotateRight}
-        />
+        <aside>
+          <GameInfo
+            level={this.state.currentLevel}
+            score={this.state.currentScore}
+            highscore={highscoreManager.localHighscore()}
+          />
+        </aside>
       </div>
     );
   }
