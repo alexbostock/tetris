@@ -5,12 +5,14 @@ import axios from 'axios';
 
 type Props = {
   score: number;
+  canSubmitScore: boolean;
+  scoreSaved: boolean;
+  setCanSubmitScore: boolean => void;
+  setScoreSaved: boolean => void;
 };
 
 function LeaderboardForm(props: Props) {
   const [nickname, setNickname] = useState(localStorage.getItem('nickname') || '');
-  const [canSubmitScore, setCanSubmitScore] = useState(true);
-  const [saved, setSaved] = useState(false);
 
   const updateNickname = event => {
     setNickname(event.target.value);
@@ -29,13 +31,13 @@ function LeaderboardForm(props: Props) {
       score: props.score,
     })
       .then(res => {
-        setSaved(true);
+        props.setScoreSaved(true);
       })
       .catch(err => {
-        setCanSubmitScore(true);
+        props.setCanSubmitScore(true);
       });
     
-    setCanSubmitScore(false);
+    props.setCanSubmitScore(false);
   }
 
   const form = (
@@ -45,16 +47,16 @@ function LeaderboardForm(props: Props) {
       <label>
         NICKNAME:
         <input value={nickname} onChange={updateNickname} />
-        <button onClick={submitForm} disabled={!canSubmitScore}>SUBMIT</button>
+        <button onClick={submitForm} disabled={!props.canSubmitScore}>SUBMIT</button>
       </label>
     </>
   );
 
   return (
     <form>
-      {saved ? null : form}
+      {props.scoreSaved ? null : form}
 
-      <p>{message(canSubmitScore, saved)}</p>
+      <p>{message(props.canSubmitScore, props.scoreSaved)}</p>
     </form>
   );
 }

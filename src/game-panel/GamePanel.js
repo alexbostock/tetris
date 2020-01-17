@@ -31,6 +31,8 @@ type State = {
   showingLeaderboard: boolean,
   leaderboardData?: List<LeaderboardItem>,
   cancelToken: any,
+  canSubmitScore: boolean,
+  scoreSaved: boolean,
 };
 
 // level -> ticks / second
@@ -56,6 +58,9 @@ class GamePanel extends React.PureComponent<Props, State> {
 
     showingLeaderboard: false,
     cancelToken: axios.CancelToken.source(),
+
+    canSubmitScore: true,
+    scoreSaved: false,
   };
 
   render() {
@@ -109,6 +114,11 @@ class GamePanel extends React.PureComponent<Props, State> {
         startGame={this.startGame}
         score={this.state.currentScore}
         showLeaderboard={this.showLeaderboard}
+
+        canSubmitScore={this.state.canSubmitScore}
+        scoreSaved={this.state.scoreSaved}
+        setCanSubmitScore={this.setCanSubmitScore}
+        setScoreSaved={this.setScoreSaved}
       />
     );
   }
@@ -142,6 +152,8 @@ class GamePanel extends React.PureComponent<Props, State> {
       currentLevel: level,
       currentScore: gameOver ? 0 : this.state.currentScore,
       heldTetromino: gameOver ? null : this.state.heldTetromino,
+      canSubmitScore: gameOver ? true : this.state.canSubmitScore,
+      scoreSaved: gameOver ? false : this.state.scoreSaved,
     });
   }
 
@@ -424,6 +436,14 @@ class GamePanel extends React.PureComponent<Props, State> {
         console.error('Failed to load leaderboard data');
         console.error(err);
       });
+  }
+
+  setCanSubmitScore = (val: boolean) => {
+    this.setState({ canSubmitScore: val });
+  }
+
+  setScoreSaved = (val: boolean) => {
+    this.setState({ scoreSaved: val });
   }
 }
 

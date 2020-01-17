@@ -10,6 +10,11 @@ type Props = {
   startGame: () => void;
   score: number;
   showLeaderboard: () => void;
+
+  canSubmitScore: boolean;
+  scoreSaved: boolean;
+  setCanSubmitScore: boolean => void;
+  setScoreSaved: boolean => void;
 }
 
 function StartGameMenu(props: Props) {
@@ -20,7 +25,15 @@ function StartGameMenu(props: Props) {
       {props.gameState === 'gameOver' ? <h2>GAME OVER</h2> : null}
       <button type="button" onClick={props.startGame}>{buttonText}</button>
 
-      {props.gameState === 'gameOver' ? <LeaderboardForm score={props.score} /> : null}
+      {props.gameState === 'gameOver' ? (
+        <LeaderboardForm
+          score={props.score}
+          canSubmitScore={props.canSubmitScore}
+          scoreSaved={props.scoreSaved}
+          setCanSubmitScore={props.setCanSubmitScore}
+          setScoreSaved={props.setScoreSaved}
+        />
+      ) : null}
 
       <button type="button" onClick={props.showLeaderboard}>SHOW LEADERBOARD</button>
     </div>

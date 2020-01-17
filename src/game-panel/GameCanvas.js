@@ -18,6 +18,11 @@ type Props = {
   startGame: () => void,
   score: number,
   showLeaderboard: () => void,
+
+  canSubmitScore: boolean,
+  scoreSaved: boolean,
+  setCanSubmitScore: boolean => void,
+  setScoreSaved: boolean => void,
 };
 
 function GameCanvas(props: Props) {
@@ -50,6 +55,11 @@ function GameCanvas(props: Props) {
           startGame={props.startGame}
           score={props.score}
           showLeaderboard={props.showLeaderboard}
+
+          canSubmitScore={props.canSubmitScore}
+          scoreSaved={props.scoreSaved}
+          setCanSubmitScore={props.setCanSubmitScore}
+          setScoreSaved={props.setScoreSaved}
         />
       }
     </div>

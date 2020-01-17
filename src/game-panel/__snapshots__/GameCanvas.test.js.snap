@@ -217,13 +217,15 @@ exports[`correctly renders minos described by props 2`] = `
           value=""
         />
         <button
-          disabled={false}
+          disabled={true}
           onClick={[Function]}
         >
           SUBMIT
         </button>
       </label>
-      <p />
+      <p>
+        SAVING
+      </p>
     </form>
     <button
       type="button"
