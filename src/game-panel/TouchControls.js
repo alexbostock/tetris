@@ -2,9 +2,6 @@
 
 import React from 'react';
 
-import HeldTetromino from './HeldTetromino';
-import type { TetrominoType } from './Tetromino';
-
 type Props = {
   moveLeft: () => void;
   moveRight: () => void;
