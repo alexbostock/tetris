@@ -15,7 +15,7 @@ type Props = {
 
 function Leaderboard(props: Props) {
   return (
-    <div>
+    <div id="leaderboard">
       {!props.data || props.data.count() === 0 ? "NO DATA AVAILABLE" : table(props.data)}
       <button type="button" onClick={props.hideLeaderboard}>GO BACK</button>
     </div>

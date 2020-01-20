@@ -26,9 +26,6 @@ type Props = {
 };
 
 function GameCanvas(props: Props) {
-  const height = 20;
-  const width = 10;
-
   const tet = props.tetromino.occupiedCells()
     .map(pos => mino(pos, props.tetromino.color()))
 
@@ -38,12 +35,6 @@ function GameCanvas(props: Props) {
   return (
     <div
       id="gameCanvas"
-      style={{
-        height: height * 3 + 'vh',
-        width: width * 3 + 'vh',
-        gridTemplateColumns: `repeat(${width}, 1fr)`,
-        gridTemplateRows: `repeat(${height}, 1fr)`,
-      }}
     >
       {shadow}
       {tet}

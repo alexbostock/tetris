@@ -12,6 +12,7 @@ import GameInfo from './GameInfo';
 import wallKicks from './wallKicks';
 import Leaderboard from './Leaderboard';
 import type { LeaderboardItem } from './Leaderboard';
+import TouchControls from './TouchControls';
 
 export type GameState = 'preStart' | 'paused' | 'gameOver' | 'playing';
 
@@ -69,12 +70,7 @@ class GamePanel extends React.PureComponent<Props, State> {
         <main>
           {this.canvas()}
 
-          <GameControls
-            playing={this.state.gameState === 'playing'}
-            heldTetromino={this.state.heldTetromino}
-            holdTetromino={this.holdTetromino}
-            pause={this.pause}
-
+          <TouchControls
             moveLeft={this.moveLeft}
             moveRight={this.moveRight}
             hardDrop={this.hardDrop}
@@ -85,6 +81,13 @@ class GamePanel extends React.PureComponent<Props, State> {
         </main>
 
         <aside>
+          <GameControls
+            playing={this.state.gameState === 'playing'}
+            heldTetromino={this.state.heldTetromino}
+            holdTetromino={this.holdTetromino}
+            pause={this.pause}
+          />
+
           <GameInfo
             level={this.state.currentLevel}
             score={this.state.currentScore}

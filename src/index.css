@@ -1,7 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Anton');
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Impact, sans-serif;
-    background-color: black;
+    font-family: Anton, sans-serif;
+    background-color: #121212;
     color: blue;
+}
+
+ul {
+    list-style-type: none;
 }
 
 button {
@@ -13,19 +23,9 @@ button {
     padding: 0.2em;
 }
 
-button:hover {
-    text-decoration: underline;
-}
-
 #gamePanel {
     display: flex;
     flex-direction: column;
-}
-
-@media (min-width: 800px) {
-    #gamePanel {
-        flex-direction: row;
-    }
 }
 
 #gamePanel > * {
@@ -34,13 +34,17 @@ button:hover {
 
 #heldTetrominoButton {
     display: grid;
-
+    
     height: 6em;
     width: 6em;
-
+    
     padding: 0;
-
+    
     background-color: grey;
+}
+
+#leaderboard {
+    padding: auto;
 }
 
 #gameCanvas, #heldTetromino {
@@ -50,14 +54,22 @@ button:hover {
     padding: 0.5px;
 }
 
+#gameCanvas, #leaderboard {
+    height: 60vh;
+    width: 30vh;
+}
+
 #gameCanvas {
     margin: auto;
+    
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(20, 1fr);
 }
 
 #heldTetromino {
     grid-column: 1;
     grid-row: 1;
-
+    
     border: none;
     margin: auto;
 }
@@ -73,15 +85,15 @@ button:hover {
 #startGameMenu {
     grid-column: 2/10;
     grid-row: 4/17;
-
+    
     text-align: center;
-
+    
     background-color: red;
-
+    
     padding: 1em;
-
+    
     z-index: 20;
-
+    
     display: flex;
     flex-direction: column;
 }
@@ -94,28 +106,44 @@ h2 {
     margin-top: 0;
 }
 
-#gameControls {
-    display: flex;
-    flex-direction: column-reverse;
-}
-
 #touchControls {
     display: grid;
-
+    
     grid-template-columns: repeat(3, 1fr);
+
+    margin: auto;
 }
 
 #touchControls > button:hover {
     text-decoration: none;
 }
 
-#otherControls {
+#gameControls {
     display: flex;
     flex-direction: row;
-
+    
     padding: 1em;
 }
 
-#otherControls > * {
+#gameControls > * {
     margin: auto;
+}
+
+@media (min-width: 800px) {
+    #gamePanel {
+        flex-direction: row;
+    }
+
+    #gameCanvas, #leaderboard {
+        height: 80vh;
+        width: 40vh;
+    }
+
+    #touchControls {
+        width: 40vh;
+    }
+
+    button:hover {
+        text-decoration: underline;
+    }
 }

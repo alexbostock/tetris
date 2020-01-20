@@ -3,14 +3,6 @@
 exports[`correctly renders minos described by props 1`] = `
 <div
   id="gameCanvas"
-  style={
-    Object {
-      "gridTemplateColumns": "repeat(10, 1fr)",
-      "gridTemplateRows": "repeat(20, 1fr)",
-      "height": "60vh",
-      "width": "30vh",
-    }
-  }
 >
   <div
     className="mino"
@@ -109,14 +101,6 @@ exports[`correctly renders minos described by props 1`] = `
 exports[`correctly renders minos described by props 2`] = `
 <div
   id="gameCanvas"
-  style={
-    Object {
-      "gridTemplateColumns": "repeat(10, 1fr)",
-      "gridTemplateRows": "repeat(20, 1fr)",
-      "height": "60vh",
-      "width": "30vh",
-    }
-  }
 >
   <div
     className="mino"
@@ -239,14 +223,6 @@ exports[`correctly renders minos described by props 2`] = `
 exports[`correctly renders minos described by props 3`] = `
 <div
   id="gameCanvas"
-  style={
-    Object {
-      "gridTemplateColumns": "repeat(10, 1fr)",
-      "gridTemplateRows": "repeat(20, 1fr)",
-      "height": "60vh",
-      "width": "30vh",
-    }
-  }
 >
   <div
     className="mino"
