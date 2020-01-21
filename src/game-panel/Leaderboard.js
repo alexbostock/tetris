@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import type { Node } from 'react';
 import { List } from 'immutable';
 
 export type LeaderboardItem = {
@@ -14,15 +15,21 @@ type Props = {
 }
 
 function Leaderboard(props: Props) {
+  const button = <button type="button" onClick={props.hideLeaderboard}>GO BACK</button>;
+
   return (
     <div id="leaderboard">
-      {!props.data || props.data.count() === 0 ? "NO DATA AVAILABLE" : table(props.data)}
-      <button type="button" onClick={props.hideLeaderboard}>GO BACK</button>
+      {!props.data || props.data.count() === 0 ?
+        <>
+          NO DATA AVAILABLE
+          <br /> {button}
+        </>
+        : table(props.data, button)}
     </div>
   );
 }
 
-function table(data: List<LeaderboardItem>) {
+function table(data: List<LeaderboardItem>, button: Node) {
   const rows = data
     .sort((a, b) => b.score - a.score)
     .map((entry, i) => (
@@ -37,7 +44,13 @@ function table(data: List<LeaderboardItem>) {
     <table>
       <thead>
         <tr>
-          <th colSpan="2">NICKNAME</th><th>SCORE</th>
+          <th colSpan="2">
+            <div>
+              {button}
+              <span>NICKNAME</span>
+            </div>
+          </th>
+          <th>SCORE</th>
         </tr>
       </thead>
       <tbody>
