@@ -22,7 +22,7 @@ function StartGameMenu(props: Props) {
 
   return (
     <div id="startGameMenu">
-      {props.gameState === 'gameOver' ? <h2>GAME OVER</h2> : null}
+      {props.gameState === 'gameOver' ? <h2>Game Over</h2> : null}
       <button type="button" onClick={props.startGame}>{buttonText}</button>
 
       {props.gameState === 'gameOver' ? (
@@ -35,16 +35,16 @@ function StartGameMenu(props: Props) {
         />
       ) : null}
 
-      <button type="button" onClick={props.showLeaderboard}>SHOW LEADERBOARD</button>
+      <button type="button" onClick={props.showLeaderboard}>Show Leaderboard</button>
     </div>
   );
 }
 
 function chooseButtonText(gameState) {
   switch (gameState) {
-    case 'preStart': return 'START GAME';
-    case 'paused': return 'RESUME';
-    case 'gameOver': return 'PLAY AGAIN';
+    case 'preStart': return 'Start Game';
+    case 'paused': return 'Resume';
+    case 'gameOver': return 'Play Again';
     case 'playing': return '';
     default:
       console.error(`Unexpected game state: ${gameState}`);

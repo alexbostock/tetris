@@ -42,12 +42,12 @@ function LeaderboardForm(props: Props) {
 
   const form = (
     <>
-      <h3>SUBMIT TO LEADERBOARD</h3>
+      <h3>Submit to Leaderboard</h3>
 
       <label>
-        NICKNAME:
+        Nickname:
         <input value={nickname} onChange={updateNickname} />
-        <button onClick={submitForm} disabled={!props.canSubmitScore}>SUBMIT</button>
+        <button onClick={submitForm} disabled={!props.canSubmitScore}>Submit</button>
       </label>
     </>
   );
@@ -63,11 +63,11 @@ function LeaderboardForm(props: Props) {
 
 function message(canSubmit: boolean, saved: boolean) {
   if (saved) {
-    return 'SAVED';
+    return 'Saved';
   }
 
   if (!canSubmit) {
-    return 'SAVING';
+    return 'Saving';
   }
 
   return null;

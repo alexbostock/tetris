@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Anton');
+@import url('https://fonts.googleapis.com/css?family=Anton|Roboto');
 
 * {
     box-sizing: border-box;
@@ -14,8 +14,13 @@ h1, h2 {
     letter-spacing: 0.2em;
 }
 
+h3, p {
+    font-family: Roboto, sans-serif;
+}
+
 ul {
     list-style-type: none;
+    padding-left: 1em;
 }
 
 button {
@@ -49,15 +54,23 @@ button {
 
 #leaderboard {
     padding: auto;
+
+    color: rgba(255, 255, 255, 0.87);
+
+    font-family: Roboto, sans-serif;
+}
+
+button, ul {
+    font-family: Roboto, sans-serif;
 }
 
 #leaderboard > table {
-    background-color: yellow;
+    border: 1px solid rgba(255, 255, 255, 0.87);
 
     margin: 1em;
-    margin-top: 2em;
+    margin-top: 1em;
 
-    height: calc(60vh - 3em);
+    height: calc(60vh - 2em);
     width: calc(30vh - 2em);
 }
 
@@ -85,7 +98,7 @@ button {
 #gameCanvas, #heldTetromino {
     display: grid;
     
-    border: 1px solid white;
+    border: 1px solid rgba(255, 255, 255, 0.87);
     padding: 0.5px;
 }
 
@@ -149,6 +162,10 @@ h2 {
     margin: auto;
 }
 
+#touchControls button {
+    font-weight: bold;
+}
+
 #touchControls > button:hover {
     text-decoration: none;
 }
@@ -180,5 +197,10 @@ h2 {
 
     button:hover {
         text-decoration: underline;
+    }
+
+    #leaderboard > table {
+        height: calc(80vh - 2em);
+        width: calc(40vh - 2em);
     }
 }

@@ -11,21 +11,21 @@ type Props = {
 function GameInfo(props: Props) {
   return (
     <div id="gameInfo">
-      <h2>CONTROLS</h2>
+      <h2>Controls</h2>
 
       <ul>
-        <li>LEFT / RIGHT: MOVE TETROMINO</li>
-        <li>DOWN: SOFT DROP</li>
-        <li>UP: HARD DROP</li>
-        <li>Z: ROTATE LEFT</li>
-        <li>X: ROTATE RIGHT</li>
-        <li>SPACE: SWAP HELD TETROMINO</li>
-        <li>P: PAUSE / RESUME</li>
+        <li>Left / Right: Move tetromino</li>
+        <li>Down: Soft drop</li>
+        <li>Up: Hard drop</li>
+        <li>Z: Rotate left</li>
+        <li>X: Rotate right</li>
+        <li>Space: Swap held tetromino</li>
+        <li>P: Pause / Resume</li>
       </ul>
 
-      <p>CURRENT LEVEL: {props.level}</p>
-      <p>CURRENT SCORE: {props.score}</p>
-      <p>HIGHSCORE: {props.highscore}</p>
+      <p>Current Level: {props.level}</p>
+      <p>Current Score: {props.score}</p>
+      <p>Highscore: {props.highscore}</p>
     </div>
   )
 }

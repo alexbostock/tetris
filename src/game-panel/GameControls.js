@@ -18,7 +18,7 @@ function GameControls(props: Props) {
       <HeldTetromino type={props.heldTetromino} action={props.holdTetromino} />
 
       <button type="button" onClick={props.pause} disabled={!props.playing}>
-        PAUSE
+        Pause
       </button>
     </div>
   );

@@ -15,13 +15,13 @@ type Props = {
 }
 
 function Leaderboard(props: Props) {
-  const button = <button type="button" onClick={props.hideLeaderboard}>GO BACK</button>;
+  const button = <button type="button" onClick={props.hideLeaderboard}>Go Back</button>;
 
   return (
     <div id="leaderboard">
       {!props.data || props.data.count() === 0 ?
         <>
-          NO DATA AVAILABLE
+          No Data Available
           <br /> {button}
         </>
         : table(props.data, button)}
@@ -47,10 +47,10 @@ function table(data: List<LeaderboardItem>, button: Node) {
           <th colSpan="2">
             <div>
               {button}
-              <span>NICKNAME</span>
+              <span>Nickname</span>
             </div>
           </th>
-          <th>SCORE</th>
+          <th>Score</th>
         </tr>
       </thead>
       <tbody>
