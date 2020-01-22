@@ -22,8 +22,15 @@ function StartGameMenu(props: Props) {
 
   return (
     <div id="startGameMenu">
-      {props.gameState === 'gameOver' ? <h2>Game Over</h2> : null}
-      <button type="button" onClick={props.startGame}>{buttonText}</button>
+      <div>
+        {props.gameState === 'gameOver' ? <h2>Game Over</h2> : null}
+
+        <button type="button" onClick={props.startGame}>{buttonText}</button>
+
+        <br/>
+
+        <button type="button" onClick={props.showLeaderboard}>Show Leaderboard</button>
+      </div>
 
       {props.gameState === 'gameOver' ? (
         <LeaderboardForm
@@ -34,8 +41,6 @@ function StartGameMenu(props: Props) {
           setScoreSaved={props.setScoreSaved}
         />
       ) : null}
-
-      <button type="button" onClick={props.showLeaderboard}>Show Leaderboard</button>
     </div>
   );
 }

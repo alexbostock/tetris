@@ -84,16 +84,19 @@ exports[`correctly renders minos described by props 1`] = `
   <div
     id="startGameMenu"
   >
-    <button
-      type="button"
-    >
-      START GAME
-    </button>
-    <button
-      type="button"
-    >
-      SHOW LEADERBOARD
-    </button>
+    <div>
+      <button
+        type="button"
+      >
+        Start Game
+      </button>
+      <br />
+      <button
+        type="button"
+      >
+        Show Leaderboard
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -182,40 +185,44 @@ exports[`correctly renders minos described by props 2`] = `
   <div
     id="startGameMenu"
   >
-    <h2>
-      GAME OVER
-    </h2>
-    <button
-      type="button"
-    >
-      PLAY AGAIN
-    </button>
+    <div>
+      <h2>
+        Game Over
+      </h2>
+      <button
+        type="button"
+      >
+        Play Again
+      </button>
+      <br />
+      <button
+        type="button"
+      >
+        Show Leaderboard
+      </button>
+    </div>
     <form>
       <h3>
-        SUBMIT TO LEADERBOARD
+        Submit to Leaderboard
       </h3>
       <label>
-        NICKNAME:
+        Nickname:
         <input
           onChange={[Function]}
           value=""
         />
-        <button
-          disabled={true}
-          onClick={[Function]}
-        >
-          SUBMIT
-        </button>
       </label>
+      <br />
+      <button
+        disabled={true}
+        onClick={[Function]}
+      >
+        Submit
+      </button>
       <p>
-        SAVING
+        Saving
       </p>
     </form>
-    <button
-      type="button"
-    >
-      SHOW LEADERBOARD
-    </button>
   </div>
 </div>
 `;

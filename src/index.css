@@ -1,26 +1,26 @@
-@import url('https://fonts.googleapis.com/css?family=Anton|Roboto');
+@import url('https://fonts.googleapis.com/css?family=Roboto|Space+Mono');
 
 * {
     box-sizing: border-box;
 }
 
 body {
-    --off-white: rgba(255, 255, 255, 0.87);
+    --off-black: rgba(0, 0, 0, 0.8);
+    --off-white: rgba(255, 255, 255, 0.7);
+    --light-blue: #4eb5c3;
+    --dark-blue: #4240bf;
+    --pink: #bf40b0;
 
-    font-family: Anton, sans-serif;
+    font-family: 'Space Mono', monospace;
     background-color: #121212;
     color: var(--off-white);
 }
 
-h1, h2 {
-    letter-spacing: 0.15em;
+h1, h2, h3 {
+    color: var(--pink);
 }
 
-h3 {
-    letter-spacing: 1px;
-}
-
-h3, p, label {
+p, label {
     font-family: Roboto, sans-serif;
 }
 
@@ -32,10 +32,15 @@ ul {
 button {
     font-family: inherit;
     font-size: 1em;
-    background-color: orange;
     border: none;
-    color: blue;
     padding: 0.2em;
+    
+    background-color: var(--pink);
+    color: var(--off-black);
+}
+
+button:hover {
+    color: var(--dark-blue);
 }
 
 #gamePanel {
@@ -61,6 +66,7 @@ button {
 #leaderboard {
     border: 1px solid var(--off-white);
 
+    margin: auto;
     padding: 1em;
 
     color: var(--off-white);
@@ -70,6 +76,11 @@ button {
 
 button, ul {
     font-family: Roboto, sans-serif;
+}
+
+input {
+    border: 1px solid var(--pink);
+    margin: 1em;
 }
 
 #leaderboard > table {
@@ -84,9 +95,10 @@ button, ul {
 
 #leaderboard td:first-child {
     text-align: right;
+    width: 2em;
 }
 
-#leaderboard td:last-child, #leaderboard th:last-child {
+#leaderboard td:last-child {
     text-align: right;
 }
 
@@ -94,12 +106,16 @@ button, ul {
     display: flex;
 }
 
-#leaderboard th:first-child > div > * {
+#leaderboard th > div > * {
     margin: auto;
 }
 
-#leaderboard th:first-child button {
-    margin-right: 0.5em;
+#leaderboard th > div > *:first-child {
+    margin-left: 0;
+}
+
+#leaderboard th > div > *:last-child {
+    margin-right: 0;
 }
 
 #gameCanvas, #heldTetromino {
@@ -144,7 +160,7 @@ button, ul {
     
     text-align: center;
     
-    background-color: red;
+    background-color: var(--off-black);
     
     padding: 1em;
     
@@ -156,6 +172,10 @@ button, ul {
 
 #startGameMenu > * {
     margin: auto;
+}
+
+#startGameMenu button {
+    margin: 1em;
 }
 
 h2 {
@@ -175,7 +195,7 @@ h2 {
 #touchControls button {
     font-weight: bold;
 
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.4);
 
     padding: 0.8em;
 }
@@ -207,10 +227,6 @@ h2 {
 
     #touchControls {
         width: 40vh;
-    }
-
-    button:hover {
-        text-decoration: underline;
     }
 
     #leaderboard > table {

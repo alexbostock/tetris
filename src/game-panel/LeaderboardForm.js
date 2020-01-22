@@ -47,8 +47,11 @@ function LeaderboardForm(props: Props) {
       <label>
         Nickname:
         <input value={nickname} onChange={updateNickname} />
-        <button onClick={submitForm} disabled={!props.canSubmitScore}>Submit</button>
       </label>
+
+      <br />
+      
+      <button onClick={submitForm} disabled={!props.canSubmitScore}>Submit</button>
     </>
   );
 
