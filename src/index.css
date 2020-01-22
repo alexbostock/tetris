@@ -11,10 +11,14 @@ body {
 }
 
 h1, h2 {
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
 }
 
-h3, p {
+h3 {
+    letter-spacing: 1px;
+}
+
+h3, p, label {
     font-family: Roboto, sans-serif;
 }
 

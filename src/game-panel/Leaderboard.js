@@ -44,13 +44,12 @@ function table(data: List<LeaderboardItem>, button: Node) {
     <table>
       <thead>
         <tr>
-          <th colSpan="2">
+          <th colSpan="3">
             <div>
+              <h3>Leaderboard</h3>
               {button}
-              <span>Nickname</span>
             </div>
           </th>
-          <th>Score</th>
         </tr>
       </thead>
       <tbody>
