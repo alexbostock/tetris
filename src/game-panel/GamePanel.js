@@ -66,7 +66,7 @@ class GamePanel extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <div id="gamePanel">
+      <>
         <main>
           {this.canvas()}
 
@@ -94,7 +94,7 @@ class GamePanel extends React.PureComponent<Props, State> {
             highscore={highscoreManager.localHighscore()}
           />
         </aside>
-      </div>
+      </>
     );
   }
 
