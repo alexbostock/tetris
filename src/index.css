@@ -5,9 +5,11 @@
 }
 
 body {
+    --off-white: rgba(255, 255, 255, 0.87);
+
     font-family: Anton, sans-serif;
     background-color: #121212;
-    color: blue;
+    color: var(--off-white);
 }
 
 h1, h2 {
@@ -57,9 +59,11 @@ button {
 }
 
 #leaderboard {
-    padding: auto;
+    border: 1px solid var(--off-white);
 
-    color: rgba(255, 255, 255, 0.87);
+    padding: 1em;
+
+    color: var(--off-white);
 
     font-family: Roboto, sans-serif;
 }
@@ -69,11 +73,6 @@ button, ul {
 }
 
 #leaderboard > table {
-    border: 1px solid rgba(255, 255, 255, 0.87);
-
-    margin: 1em;
-    margin-top: 1em;
-
     height: calc(60vh - 2em);
     width: calc(30vh - 2em);
 }
@@ -81,6 +80,10 @@ button, ul {
 #leaderboard td, #leaderboard th {
     padding: 0.5em;
     text-align: left;
+}
+
+#leaderboard td:first-child {
+    text-align: right;
 }
 
 #leaderboard td:last-child, #leaderboard th:last-child {
@@ -102,8 +105,9 @@ button, ul {
 #gameCanvas, #heldTetromino {
     display: grid;
     
-    border: 1px solid rgba(255, 255, 255, 0.87);
-    padding: 0.5px;
+    border: 1px solid var(--off-white);
+
+    border-collapse: collapse;
 }
 
 #gameCanvas, #leaderboard {
@@ -127,7 +131,7 @@ button, ul {
 }
 
 #gameCanvas > *, #heldTetromino > * {
-    border: 0.5px solid white;
+    border: 1px solid var(--off-white);
 }
 
 .mino {
