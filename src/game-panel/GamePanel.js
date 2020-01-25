@@ -170,6 +170,7 @@ class GamePanel extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     document.body.addEventListener('keydown', event => {
+      event.preventDefault();
       this.handleKey(event.key);
     });
 
