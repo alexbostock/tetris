@@ -234,6 +234,10 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   handleKey = (key: string) => {
+    if (this.state.showingLeaderboard) {
+      return;
+    }
+
     if (key === 'p') {
       if (this.state.gameState === 'playing') {
         this.pause();
@@ -304,6 +308,10 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   moveRight = () => {
+    if (this.state.gameState !== 'playing') {
+      return;
+    }
+
     const tet = this.state.currentTetromino.rightOne();
     if (withinBounds(tet) && !overlap(tet, this.state.staticBlocks)) {
       this.setState({ currentTetromino: tet });
@@ -311,6 +319,10 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   moveLeft = () => {
+    if (this.state.gameState !== 'playing') {
+      return;
+    }
+
     const tet = this.state.currentTetromino.leftOne();
     if (withinBounds(tet) && !overlap(tet, this.state.staticBlocks)) {
       this.setState({ currentTetromino: tet });
@@ -318,12 +330,20 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   hardDrop = () => {
+    if (this.state.gameState !== 'playing') {
+      return;
+    }
+
     const tet = this.shadow();
 
     this.tick(tet);
   }
 
   rotateLeft = () => {
+    if (this.state.gameState !== 'playing') {
+      return;
+    }
+
     const tet = this.state.currentTetromino.rotateLeft();
 
     const fromOrientation = this.state.currentTetromino.orientation;
@@ -333,6 +353,10 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   rotateRight = () => {
+    if (this.state.gameState !== 'playing') {
+      return;
+    }
+
     const tet = this.state.currentTetromino.rotateRight();
 
     const fromOrientation = this.state.currentTetromino.orientation;
@@ -414,6 +438,10 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   holdTetromino = () => {
+    if (this.state.gameState !== 'playing') {
+      return;
+    }
+
     const held = this.state.heldTetromino;
 
     const tet = held ? new Tetromino(held) : tetrominoGenerator.next();
