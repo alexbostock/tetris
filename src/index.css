@@ -131,6 +131,14 @@ input {
     width: 30vh;
 }
 
+#leaderboard {
+    width: 40vh;
+}
+
+#leaderboard > table {
+    width: 100%;
+}
+
 #gameCanvas {
     margin: auto;
     
@@ -155,8 +163,8 @@ input {
 }
 
 #startGameMenu {
-    grid-column: 2/10;
-    grid-row: 4/17;
+    grid-column: 1/11;
+    grid-row: 1/21;
     
     text-align: center;
     
@@ -170,15 +178,26 @@ input {
     flex-direction: column;
 }
 
+@media (min-width: 800px) {
+    #startGameMenu {
+        grid-column: 2/10;
+        grid-row: 3/18;
+    }
+}
+
 #startGameMenu > * {
     margin: auto;
+}
+
+#startGameMenu input {
+    width: calc(100% - 2em);
 }
 
 #startGameMenu button {
     margin: 1em;
 }
 
-h2 {
+h2, #startGameMenu h3 {
     margin-top: 0;
 }
 

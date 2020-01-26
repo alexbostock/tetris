@@ -40,6 +40,8 @@ function LeaderboardForm(props: Props) {
     props.setCanSubmitScore(false);
   }
 
+  const msg = message(props.canSubmitScore, props.scoreSaved);
+
   const form = (
     <>
       <h3>Submit to Leaderboard</h3>
@@ -51,15 +53,13 @@ function LeaderboardForm(props: Props) {
 
       <br />
       
-      <button onClick={submitForm} disabled={!props.canSubmitScore}>Submit</button>
+      <button onClick={submitForm} disabled={!props.canSubmitScore}>{msg}</button>
     </>
   );
 
   return (
     <form>
-      {props.scoreSaved ? null : form}
-
-      <p>{message(props.canSubmitScore, props.scoreSaved)}</p>
+      {props.scoreSaved ? <p>Saved</p> : form}
     </form>
   );
 }
@@ -73,7 +73,7 @@ function message(canSubmit: boolean, saved: boolean) {
     return 'Saving';
   }
 
-  return null;
+  return 'Submit';
 }
 
 export default LeaderboardForm;
