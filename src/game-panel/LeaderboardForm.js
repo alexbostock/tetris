@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 type Props = {
@@ -14,9 +14,17 @@ type Props = {
 function LeaderboardForm(props: Props) {
   const [nickname, setNickname] = useState(localStorage.getItem('nickname') || '');
 
+  useEffect(() => {
+    localStorage.setItem('nickname', nickname);
+  }, [nickname]);
+
+  if (props.scoreSaved) {
+    return <p>Score Saved</p>;
+  }
+
   const updateNickname = event => {
+    event.preventDefault();
     setNickname(event.target.value);
-    localStorage.setItem('nickname', event.target.value);
   }
 
   const submitForm = event => {
@@ -40,10 +48,10 @@ function LeaderboardForm(props: Props) {
     props.setCanSubmitScore(false);
   }
 
-  const msg = message(props.canSubmitScore, props.scoreSaved);
+  const msg = props.canSubmitScore ? 'Submit' : 'Saving';
 
-  const form = (
-    <>
+  return (
+    <form>
       <h3>Submit to Leaderboard</h3>
 
       <label>
@@ -54,26 +62,8 @@ function LeaderboardForm(props: Props) {
       <br />
       
       <button onClick={submitForm} disabled={!props.canSubmitScore}>{msg}</button>
-    </>
-  );
-
-  return (
-    <form>
-      {props.scoreSaved ? <p>Saved</p> : form}
     </form>
   );
-}
-
-function message(canSubmit: boolean, saved: boolean) {
-  if (saved) {
-    return 'Saved';
-  }
-
-  if (!canSubmit) {
-    return 'Saving';
-  }
-
-  return 'Submit';
 }
 
 export default LeaderboardForm;

@@ -60,7 +60,7 @@ function GameCanvas(props: Props) {
 function mino(pos: Position, colour: string, opacity: number = 1) {
   return (
     <Mino
-      key={pos.x + ',' + pos.y}
+      key={pos.x + ',' + pos.y + colour}
       pos={pos}
       colour={colour}
       opacity={opacity}

@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { List, Set } from 'immutable';
 import axios from 'axios';
@@ -86,6 +88,7 @@ class GamePanel extends React.PureComponent<Props, State> {
             heldTetromino={this.state.heldTetromino}
             holdTetromino={this.holdTetromino}
             pause={this.pause}
+            keyHandler={this.keyHandler}
           />
 
           <GameInfo
@@ -169,10 +172,24 @@ class GamePanel extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    document.body.addEventListener('keydown', event => {
-      event.preventDefault();
-      this.handleKey(event.key);
-    });
+    if (document.body !== null) {
+      document.body.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.key !== 'p' || this.state.showingLeaderboard) {
+          return;
+        }
+
+        // Don't override the p key while typing a nickname
+        if (this.state.gameState === 'gameOver') {
+          return;
+        }
+
+        if (this.state.gameState === 'playing') {
+          this.pause();
+        } else {
+          this.startGame();
+        }
+      });
+    }
 
     this.loadLeaderboard();
   }
@@ -233,18 +250,17 @@ class GamePanel extends React.PureComponent<Props, State> {
     })
   }
 
+  keyHandler = (event: any) => {
+    event.preventDefault();
+    this.handleKey(event.key);
+  }
+
   handleKey = (key: string) => {
     if (this.state.showingLeaderboard) {
       return;
     }
 
     if (key === 'p') {
-      if (this.state.gameState === 'playing') {
-        this.pause();
-      } else {
-        this.startGame();
-      }
-
       return;
     }
 
